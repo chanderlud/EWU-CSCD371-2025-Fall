@@ -1,10 +1,28 @@
-﻿namespace Logger;
+﻿using System;
+
+namespace Logger;
 
 public class LogFactory
 {
+    string? _filePath;
+
     public BaseLogger CreateLogger(string className)
     {
+        if (_filePath == null)
+        {
+            return null;
+        }
+        else
+        {
+            return new FileLogger(_filePath)
+            {
+                ClassName = className,
+            };
+        }
+    }
 
-        return null;
+    public void ConfigureFileLogger(string filePath)
+    {
+        _filePath = filePath;
     }
 }
