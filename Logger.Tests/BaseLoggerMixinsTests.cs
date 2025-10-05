@@ -12,7 +12,7 @@ public class BaseLoggerMixinsTests
     public void Error_WithNullLogger_ThrowsException()
     {
         // Arrange
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         // Act
         BaseLoggerMixins.Error(null, "");
@@ -22,10 +22,24 @@ public class BaseLoggerMixinsTests
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void Warning_NullLogger_ThrowsArgumentNullException()
+    {
+        // Arrange
+        TestLogger logger = new();
+
+        // Act
+        BaseLoggerMixins.Warning(null, "");
+
+        // Assert
+        Assert.AreEqual(0, logger.LoggedMessages.Count);
+    }
+
+    [TestMethod]
     public void Error_WithData_LogsMessage()
     {
         // Arrange
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         // Act
         logger.Error("Message {0}", 42);
@@ -34,6 +48,52 @@ public class BaseLoggerMixinsTests
         Assert.AreEqual(1, logger.LoggedMessages.Count);
         Assert.AreEqual(LogLevel.Error, logger.LoggedMessages[0].LogLevel);
         Assert.AreEqual("Message 42", logger.LoggedMessages[0].Message);
+    }
+
+
+    [TestMethod]
+    public void Information_ValidLogger_FormatsMessageCorrectly()
+    {
+        // Arrange
+        TestLogger logger = new();
+
+        // Act
+        logger.Information("User {0} successfully logged in", "Bob");
+
+        // Assert
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual(LogLevel.Information, logger.LoggedMessages[0].LogLevel);
+        Assert.AreEqual("User Bob successfully logged in", logger.LoggedMessages[0].Message);
+    }
+
+    [TestMethod]
+    public void Debug_ValidLogger_RecordsMessageWithDebugLevel()
+    {
+        // Arrange
+        TestLogger logger = new();
+
+        // Act
+        logger.Debug("Debugging process step");
+
+        // Assert
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual(LogLevel.Debug, logger.LoggedMessages[0].LogLevel);
+        Assert.AreEqual("Debugging process step", logger.LoggedMessages[0].Message);
+    }
+
+    [TestMethod]
+    public void Warning_ValidLogger_LogsWarningMessage()
+    {
+        // Arrange
+        TestLogger logger = new();
+
+        // Act
+        logger.Warning("Disk space is running low");
+
+        // Assert
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual(LogLevel.Warning, logger.LoggedMessages[0].LogLevel);
+        Assert.AreEqual("Disk space is running low", logger.LoggedMessages[0].Message);
     }
 
 }

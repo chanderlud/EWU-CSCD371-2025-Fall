@@ -6,7 +6,7 @@ public class LogFactory
 {
     string? _filePath;
 
-    public BaseLogger CreateLogger(string className)
+    public BaseLogger? CreateLogger(string className)
     {
         if (_filePath == null)
         {
