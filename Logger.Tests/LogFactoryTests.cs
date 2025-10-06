@@ -12,7 +12,7 @@ public class LogFactoryTests
         LogFactory factory = new();
         factory.ConfigureFileLogger("test.log");
         var logger = factory.CreateLogger(nameof(LogFactoryTests));
-        Assert.AreEqual(logger.ClassName, nameof(LogFactoryTests));
+        Assert.AreEqual(nameof(LogFactoryTests), logger.ClassName);
     }
 
     [TestMethod]

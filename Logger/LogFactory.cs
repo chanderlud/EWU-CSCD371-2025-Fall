@@ -8,17 +8,10 @@ public class LogFactory
 
     public BaseLogger? CreateLogger(string className)
     {
-        if (_filePath == null)
+        return _filePath == null ? null : new FileLogger(_filePath)
         {
-            return null;
-        }
-        else
-        {
-            return new FileLogger(_filePath)
-            {
-                ClassName = className,
-            };
-        }
+            ClassName = className,
+        };
     }
 
     public void ConfigureFileLogger(string filePath)
