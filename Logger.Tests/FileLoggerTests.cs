@@ -13,6 +13,7 @@ public class FileLoggerTests
         LogFactory factory = new();
         factory.ConfigureFileLogger("test.log");
         var logger = factory.CreateLogger(nameof(FileLoggerTests));
+        Assert.IsNotNull(logger);
         logger.Warning("Hello {0}", 16);
 
         string contents = File.ReadAllText("test.log");
@@ -34,7 +35,7 @@ public class FileLoggerTests
         var logger = factory.CreateLogger(nameof(FileLoggerTests));
 
         // Act
-        logger!.Information("First message");
+        logger.Information("First message");
         logger.Warning("Second message");
 
         // Assert
@@ -59,7 +60,7 @@ public class FileLoggerTests
         var logger = factory.CreateLogger(nameof(FileLoggerTests));
 
         // Act
-        logger!.Error("Creating log file automatically");
+        logger.Error("Creating log file automatically");
 
         // Assert
         Assert.IsTrue(File.Exists(logPath));
