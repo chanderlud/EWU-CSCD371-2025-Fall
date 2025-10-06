@@ -3,14 +3,9 @@ using System.IO;
 
 namespace Logger
 {
-    public class FileLogger : BaseLogger
+    public class FileLogger(string filePath) : BaseLogger
     {
-        private readonly string _filePath;
-
-        public FileLogger(string filePath)
-        {
-            _filePath = filePath;
-        }
+        private readonly string _filePath = filePath;
 
         public override void Log(LogLevel logLevel, string message)
         {

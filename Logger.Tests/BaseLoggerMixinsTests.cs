@@ -8,31 +8,23 @@ namespace Logger.Tests;
 public class BaseLoggerMixinsTests
 {
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void Error_WithNullLogger_ThrowsException()
     {
         // Arrange
         TestLogger logger = new();
 
-        // Act
-        BaseLoggerMixins.Error(null, "");
-
-        // Assert
-        Assert.IsEmpty(logger.LoggedMessages);
+        // Act & Assert
+        Assert.ThrowsExactly<ArgumentNullException>(() => BaseLoggerMixins.Error(null, ""));
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void Warning_NullLogger_ThrowsArgumentNullException()
     {
         // Arrange
         TestLogger logger = new();
 
-        // Act
-        BaseLoggerMixins.Warning(null, "");
-
-        // Assert
-        Assert.IsEmpty(logger.LoggedMessages);
+        // Act & Assert
+        Assert.ThrowsExactly<ArgumentNullException>(() => BaseLoggerMixins.Warning(null, ""));
     }
 
     [TestMethod]

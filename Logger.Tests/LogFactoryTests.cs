@@ -14,7 +14,7 @@ public class LogFactoryTests
         LogFactory factory = new();
         factory.ConfigureFileLogger("test.log");
         var logger = factory.CreateLogger(nameof(LogFactoryTests));
-        Assert.AreEqual(nameof(LogFactoryTests), logger.ClassName);
+        Assert.AreEqual(nameof(LogFactoryTests), logger?.ClassName);
     }
 
     [TestMethod]
@@ -54,7 +54,7 @@ public class LogFactoryTests
         var loggerA = factory.CreateLogger("ClassA");
         var loggerB = factory.CreateLogger("ClassB");
 
-        Assert.AreEqual("ClassA", loggerA.ClassName);
-        Assert.AreEqual("ClassB", loggerB.ClassName);
+        Assert.AreEqual("ClassA", loggerA?.ClassName);
+        Assert.AreEqual("ClassB", loggerB?.ClassName);
     }
 }

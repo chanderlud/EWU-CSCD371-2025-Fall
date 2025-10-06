@@ -41,8 +41,8 @@ public class FileLoggerTests
         // Assert
         string[] lines = File.ReadAllLines(logPath);
         Assert.HasCount(2, lines);
-        Assert.Contains(lines[0], "FileLoggerTests Information First message");
-        Assert.Contains(lines[1], "FileLoggerTests Warning Second message");
+        Assert.Contains("FileLoggerTests Information First message", lines[0]);
+        Assert.Contains("FileLoggerTests Warning Second message", lines[1]);
     }
 
     [TestMethod]
@@ -65,6 +65,6 @@ public class FileLoggerTests
         // Assert
         Assert.IsTrue(File.Exists(logPath));
         string contents = File.ReadAllText(logPath);
-        Assert.Contains(contents, "FileLoggerTests Error Creating log file automatically");
+        Assert.Contains("FileLoggerTests Error Creating log file automatically", contents);
     }
 }
