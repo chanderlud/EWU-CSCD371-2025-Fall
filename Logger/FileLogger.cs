@@ -5,7 +5,7 @@ namespace Logger
 {
     public class FileLogger : BaseLogger
     {
-        private string _filePath;
+        private readonly string _filePath;
 
         public FileLogger(string filePath)
         {
