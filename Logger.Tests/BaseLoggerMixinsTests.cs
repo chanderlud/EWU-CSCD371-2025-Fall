@@ -18,7 +18,7 @@ public class BaseLoggerMixinsTests
         BaseLoggerMixins.Error(null, "");
 
         // Assert
-        Assert.AreEqual(0, logger.LoggedMessages.Count);
+        Assert.IsEmpty(logger.LoggedMessages);
     }
 
     [TestMethod]
@@ -32,7 +32,7 @@ public class BaseLoggerMixinsTests
         BaseLoggerMixins.Warning(null, "");
 
         // Assert
-        Assert.AreEqual(0, logger.LoggedMessages.Count);
+        Assert.IsEmpty(logger.LoggedMessages);
     }
 
     [TestMethod]
@@ -45,7 +45,7 @@ public class BaseLoggerMixinsTests
         logger.Error("Message {0}", 42);
 
         // Assert
-        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.HasCount(1, logger.LoggedMessages);
         Assert.AreEqual(LogLevel.Error, logger.LoggedMessages[0].LogLevel);
         Assert.AreEqual("Message 42", logger.LoggedMessages[0].Message);
     }
@@ -61,7 +61,7 @@ public class BaseLoggerMixinsTests
         logger.Information("User {0} successfully logged in", "Bob");
 
         // Assert
-        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.HasCount(1, logger.LoggedMessages);
         Assert.AreEqual(LogLevel.Information, logger.LoggedMessages[0].LogLevel);
         Assert.AreEqual("User Bob successfully logged in", logger.LoggedMessages[0].Message);
     }
@@ -76,7 +76,7 @@ public class BaseLoggerMixinsTests
         logger.Debug("Debugging process step");
 
         // Assert
-        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.HasCount(1, logger.LoggedMessages);
         Assert.AreEqual(LogLevel.Debug, logger.LoggedMessages[0].LogLevel);
         Assert.AreEqual("Debugging process step", logger.LoggedMessages[0].Message);
     }
@@ -91,7 +91,7 @@ public class BaseLoggerMixinsTests
         logger.Warning("Disk space is running low");
 
         // Assert
-        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.HasCount(1, logger.LoggedMessages);
         Assert.AreEqual(LogLevel.Warning, logger.LoggedMessages[0].LogLevel);
         Assert.AreEqual("Disk space is running low", logger.LoggedMessages[0].Message);
     }
