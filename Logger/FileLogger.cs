@@ -9,9 +9,10 @@ namespace Logger
 
         public override void Log(LogLevel logLevel, string message)
         {
-            StreamWriter writer = File.AppendText(_filePath);
-            writer.WriteLine($"{DateTime.Now} {ClassName} {logLevel} {message}");
-            writer.Close();
+            using (StreamWriter writer = File.AppendText(_filePath))
+            {
+                writer.WriteLine($"{DateTime.Now} {ClassName} {logLevel} {message}");
+            }
         }
     }
 }
