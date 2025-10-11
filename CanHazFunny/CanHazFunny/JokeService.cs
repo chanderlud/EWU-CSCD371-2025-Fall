@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace CanHazFunny;
 
@@ -9,6 +10,6 @@ public class JokeService : IJokeService
     public string GetJoke()
     {
         string joke = HttpClient.GetStringAsync("https://geek-jokes.sameerkumar.website/api").Result;
-        return joke;
+        return Regex.Unescape(joke);
     }
 }

@@ -1,5 +1,6 @@
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Xunit;
 
@@ -114,5 +115,61 @@ public class JesterTests
         // Act + Assert
         IOException ex = Assert.Throws<IOException>(() => jester.TellJoke());
         Assert.Equal("printer jam", ex.Message);
+    }
+
+    [Fact]
+    public void TellJoke_WhenServiceReturnsChuckNorrisJokes_FiltersUntilCleanJoke()
+    {
+        // Arrange
+        Mock<IJokeOutput> outputMock = new();
+        Mock<IJokeService> serviceMock = new();
+
+        Queue<string> jokes = new Queue<string>(
+        [
+            "Chuck Norris counted to infinity. Twice.",
+            "The dinosaurs looked at Chuck Norris the wrong way once.",
+            "A clean, safe, corporate-approved joke."
+        ]);
+
+        serviceMock.Setup(s => s.GetJoke()).Returns(() => jokes.Dequeue());
+
+        Jester jester = new(outputMock.Object, serviceMock.Object);
+
+        // Act
+        jester.TellJoke();
+
+        // Assert
+        serviceMock.Verify(s => s.GetJoke(), Times.Exactly(3));
+        outputMock.Verify(o => o.PrintJoke("A clean, safe, corporate-approved joke."), Times.Once);
+    }
+
+    [Theory]
+    [InlineData("Chuck Norris once roundhouse kicked a server into uptime.")]
+    [InlineData("I heard chuck norris debugs in production.")]
+    [InlineData("CHUCK NORRIS DOES NOT NEED UNIT TESTS.")]
+    public void TellJoke_FiltersCaseInsensitively(string badJoke)
+    {
+        // Arrange
+        Mock<IJokeOutput> outputMock = new();
+        Mock<IJokeService> serviceMock = new();
+        int callCount = 0;
+
+        serviceMock.Setup(s => s.GetJoke()).Returns(() =>
+        {
+            callCount++;
+            if (callCount > 5)
+            {
+                throw new InvalidOperationException("infinite chuck norris loop");
+            }
+
+            return badJoke;
+        });
+
+        Jester jester = new(outputMock.Object, serviceMock.Object);
+
+        // Act + Assert
+        InvalidOperationException ex = Assert.Throws<InvalidOperationException>(() => jester.TellJoke());
+        Assert.Equal("infinite chuck norris loop", ex.Message);
+        outputMock.Verify(o => o.PrintJoke(It.IsAny<string>()), Times.Never);
     }
 }

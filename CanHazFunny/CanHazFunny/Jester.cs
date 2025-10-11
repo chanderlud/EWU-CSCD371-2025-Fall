@@ -9,6 +9,18 @@ public sealed class Jester(IJokeOutput jokeOutput, IJokeService jokeService)
 
     public void TellJoke()
     {
-        JokeOutput.PrintJoke(JokeService.GetJoke());
+        string? filteredJoke = null;
+
+        while (filteredJoke is null)
+        {
+            string joke = JokeService.GetJoke();
+
+            if (!joke.Contains("chuck norris", StringComparison.OrdinalIgnoreCase))
+            {
+                filteredJoke = joke;
+            }
+        }
+
+        JokeOutput.PrintJoke(filteredJoke);
     }
 }
