@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace CanHazFunny;
 
-
-internal class JokeOutput : IJokeOutput
+public sealed class JokeOutput(TextWriter? writer = null) : IJokeOutput
 {
+    public TextWriter Writer { get; } = writer ?? Console.Out;
+
     public void PrintJoke(string joke)
     {
-        Console.WriteLine(joke);
+        if (string.IsNullOrWhiteSpace(joke))
+        {
+            throw new ArgumentException("Joke cannot be null or empty.", nameof(joke));
+        }
+
+        Writer.WriteLine(joke);
     }
 }
-
