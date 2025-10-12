@@ -3,7 +3,8 @@ using System.IO;
 
 namespace CanHazFunny;
 
-public class JokeOutput(TextWriter? writer = null) : IJokeOutput
+
+public class JokeOutput(TextWriter? writer = default) : IJokeOutput
 {
     public TextWriter Writer { get; } = writer ?? Console.Out;
 
