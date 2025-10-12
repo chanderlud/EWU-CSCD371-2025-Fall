@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 
 namespace CanHazFunny;
@@ -9,7 +10,14 @@ public class JokeService : IJokeService
 
     public string GetJoke()
     {
-        string joke = HttpClient.GetStringAsync("https://geek-jokes.sameerkumar.website/api").Result;
-        return Regex.Unescape(joke);
+        JokeResponse? response = HttpClient.GetFromJsonAsync<JokeResponse>("https://geek-jokes.sameerkumar.website/api?format=json").Result;
+
+        if (response is not null)
+        {
+            return Regex.Unescape(response.Joke);
+        } else
+        {
+            throw new HttpRequestException();
+        }
     }
 }
