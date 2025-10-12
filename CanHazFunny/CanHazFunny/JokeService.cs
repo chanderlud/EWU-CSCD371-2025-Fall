@@ -15,8 +15,7 @@ public class JokeService : IJokeService
         if (response is not null)
         {
             return Regex.Unescape(response.Joke);
-        } else
-        {
+        } else {
             throw new HttpRequestException();
         }
     }
