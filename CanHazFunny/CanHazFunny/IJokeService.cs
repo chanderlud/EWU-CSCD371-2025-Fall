@@ -6,7 +6,7 @@
 public interface IJokeService
 {
     /// <summary>
-    /// Retreives a joke.
+    /// Retrieves a joke.
     /// </summary>
     /// <returns>The joke text.</returns>
     string GetJoke();
