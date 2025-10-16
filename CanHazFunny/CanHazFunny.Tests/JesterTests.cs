@@ -12,7 +12,7 @@ public class JesterTests
     public void Constructor_WithValidDependencies_SetsProperties()
     {
         // Arrange
-        Mock<IJokeOutput> outputMock = new();
+        Mock<IOutput> outputMock = new();
         Mock<IJokeService> serviceMock = new();
 
         // Act
@@ -40,7 +40,7 @@ public class JesterTests
     public void Constructor_WithNullService_ThrowsArgumentNullException()
     {
         // Arrange
-        Mock<IJokeOutput> outputMock = new();
+        Mock<IOutput> outputMock = new();
 
         // Act
         ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new Jester(outputMock.Object, null!));
@@ -55,7 +55,7 @@ public class JesterTests
         // Arrange
         string expectedJoke = "Why did the developer go broke? Because he used up all his cache.";
 
-        Mock<IJokeOutput> outputMock = new();
+        Mock<IOutput> outputMock = new();
         Mock<IJokeService> serviceMock = new();
         serviceMock.Setup(s => s.GetJoke()).Returns(expectedJoke);
 
@@ -66,14 +66,14 @@ public class JesterTests
 
         // Assert
         serviceMock.Verify(s => s.GetJoke(), Times.Once);
-        outputMock.Verify(o => o.PrintJoke(expectedJoke), Times.Once);
+        outputMock.Verify(o => o.Write(expectedJoke), Times.Once);
     }
 
     [Fact]
     public void TellJoke_WhenServiceReturnsEmptyString_StillCallsPrintJoke()
     {
         // Arrange
-        Mock<IJokeOutput> outputMock = new();
+        Mock<IOutput> outputMock = new();
         Mock<IJokeService> serviceMock = new();
         serviceMock.Setup(s => s.GetJoke()).Returns(string.Empty);
 
@@ -83,14 +83,14 @@ public class JesterTests
         jester.TellJoke();
 
         // Assert
-        outputMock.Verify(o => o.PrintJoke(string.Empty), Times.Once);
+        outputMock.Verify(o => o.Write(string.Empty), Times.Once);
     }
 
     [Fact]
     public void TellJoke_WhenServiceThrows_PropagatesException()
     {
         // Arrange
-        Mock<IJokeOutput> outputMock = new();
+        Mock<IOutput> outputMock = new();
         Mock<IJokeService> serviceMock = new();
         serviceMock.Setup(s => s.GetJoke()).Throws(new InvalidOperationException("bad joke source"));
 
@@ -105,10 +105,10 @@ public class JesterTests
     public void TellJoke_WhenOutputThrows_PropagatesException()
     {
         // Arrange
-        Mock<IJokeOutput> outputMock = new();
+        Mock<IOutput> outputMock = new();
         Mock<IJokeService> serviceMock = new();
         serviceMock.Setup(s => s.GetJoke()).Returns("Some joke");
-        outputMock.Setup(o => o.PrintJoke(It.IsAny<string>())).Throws(new IOException("printer jam"));
+        outputMock.Setup(o => o.Write(It.IsAny<string>())).Throws(new IOException("printer jam"));
 
         Jester jester = new(outputMock.Object, serviceMock.Object);
 
@@ -121,7 +121,7 @@ public class JesterTests
     public void TellJoke_WhenServiceReturnsChuckNorrisJokes_FiltersUntilCleanJoke()
     {
         // Arrange
-        Mock<IJokeOutput> outputMock = new();
+        Mock<IOutput> outputMock = new();
         Mock<IJokeService> serviceMock = new();
 
         Queue<string> jokes = new Queue<string>(
@@ -140,7 +140,7 @@ public class JesterTests
 
         // Assert
         serviceMock.Verify(s => s.GetJoke(), Times.Exactly(3));
-        outputMock.Verify(o => o.PrintJoke("A clean, safe, corporate-approved joke."), Times.Once);
+        outputMock.Verify(o => o.Write("A clean, safe, corporate-approved joke."), Times.Once);
     }
 
     [Theory]
@@ -150,7 +150,7 @@ public class JesterTests
     public void TellJoke_FiltersCaseInsensitively(string badJoke)
     {
         // Arrange
-        Mock<IJokeOutput> outputMock = new();
+        Mock<IOutput> outputMock = new();
         Mock<IJokeService> serviceMock = new();
         int callCount = 0;
 
@@ -170,6 +170,6 @@ public class JesterTests
         // Act + Assert
         InvalidOperationException ex = Assert.Throws<InvalidOperationException>(() => jester.TellJoke());
         Assert.Equal("infinite chuck norris loop", ex.Message);
-        outputMock.Verify(o => o.PrintJoke(It.IsAny<string>()), Times.Never);
+        outputMock.Verify(o => o.Write(It.IsAny<string>()), Times.Never);
     }
 }

@@ -14,7 +14,7 @@ public class JokeOutputTests
         JokeOutput output = new(writer);
 
         // Act
-        output.PrintJoke("Knock knock");
+        output.Write("Knock knock");
 
         // Assert
         Assert.Equal("Knock knock" + Environment.NewLine, writer.ToString());
@@ -30,7 +30,7 @@ public class JokeOutputTests
         JokeOutput output = new();
 
         // Act
-        ArgumentException ex = Assert.Throws<ArgumentException>(() => output.PrintJoke(badInput!));
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => output.Write(badInput!));
 
         // Assert
         Assert.Equal("joke", ex.ParamName);

@@ -4,11 +4,11 @@ using System.IO;
 namespace CanHazFunny;
 
 
-public class JokeOutput(TextWriter? writer = default) : IJokeOutput
+public class JokeOutput(TextWriter? writer = default) : IOutput
 {
     public TextWriter Writer { get; } = writer ?? Console.Out;
 
-    public void PrintJoke(string joke)
+    public void Write(string joke)
     {
         if (string.IsNullOrWhiteSpace(joke))
         {

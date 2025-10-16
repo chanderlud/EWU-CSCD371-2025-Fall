@@ -2,9 +2,9 @@
 
 namespace CanHazFunny;
 
-public class Jester(IJokeOutput jokeOutput, IJokeService jokeService)
+public class Jester(IOutput jokeOutput, IJokeService jokeService)
 {
-    public IJokeOutput JokeOutput { get; } = jokeOutput ?? throw new ArgumentNullException(nameof(jokeOutput));
+    public IOutput JokeOutput { get; } = jokeOutput ?? throw new ArgumentNullException(nameof(jokeOutput));
     public IJokeService JokeService { get; } = jokeService ?? throw new ArgumentNullException(nameof(jokeService));
     public string BannedSubstring { get; set; } = "chuck norris";
 
@@ -16,6 +16,6 @@ public class Jester(IJokeOutput jokeOutput, IJokeService jokeService)
             filteredJoke = JokeService.GetJoke();
         } while (filteredJoke.Contains(BannedSubstring, StringComparison.OrdinalIgnoreCase));
 
-        JokeOutput.PrintJoke(filteredJoke);
+        JokeOutput.Write(filteredJoke);
     }
 }
