@@ -11,7 +11,8 @@ public class JokeOutputTests
     {
         // Arrange
         StringWriter writer = new();
-        JokeOutput output = new(writer);
+        Console.SetOut(writer);
+        JokeOutput output = new();
 
         // Act
         output.Write("Knock knock");
@@ -34,18 +35,5 @@ public class JokeOutputTests
 
         // Assert
         Assert.Equal("joke", ex.ParamName);
-    }
-
-    [Fact]
-    public void Constructor_WithoutParameters_SetsWriterToConsoleOut()
-    {
-        // Arrange
-        JokeOutput output = new();
-
-        // Act
-        TextWriter writer = output.Writer;
-
-        // Assert
-        Assert.Same(Console.Out, writer);
     }
 }
