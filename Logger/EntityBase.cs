@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Logger;
 
-namespace Logger;
-
+/// <summary>
+/// EntityBase implicitly implements IEntity
+/// </summary>
 public abstract record class EntityBase : IEntity
 {
-    //This is Explicit as its implementation is not required.
-    public abstract string Name { get; }
-
     public Guid Id { get; init; } = Guid.NewGuid();
+
+    public abstract string Name { get; }
 }
