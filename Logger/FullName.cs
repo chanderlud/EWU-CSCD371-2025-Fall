@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Logger;
 
-namespace Logger;
 /// <summary>
 /// The First Middle and Last variables are defined as 'refrence' types.
 /// 
@@ -19,11 +14,13 @@ public record class FullName
     public FullName(string firstName, string? middleName, string lastName)
     {
         First = firstName ?? throw new ArgumentNullException(nameof(firstName));
-        Last = lastName ?? throw new ArgumentNullException(nameof(lastName));
         Middle = string.IsNullOrWhiteSpace(middleName) ? null : middleName;
+        Last = lastName ?? throw new ArgumentNullException(nameof(lastName));
     }
+
     public override string ToString()
     {
-        return $"{First} {Middle} {Last}";
+        // space-seperated names, ignoring null or empty
+        return string.Join(" ", new[] { First, Middle, Last }.Where(s => !string.IsNullOrWhiteSpace(s)));
     }
 }
