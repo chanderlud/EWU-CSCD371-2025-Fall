@@ -1,70 +1,129 @@
-﻿using System;
-using System.Collections.Generic;
-using Xunit;
+﻿using Xunit;
 
 namespace Logger.Tests;
 
 public class StorageTests
 {
-    [Fact]
-    public void Add_CompareEmployeeAndStudent_Failure()
-    {
-        //Arrange
-        Storage storage = new ();
-        Employee marge = new (new FullName("Marge", null, "Simpson"), 60000f);
-        Student margeStudent = new (new FullName("Marge", null, "Simpson"), 3.0f);
-        //Act
-        storage.Add(marge);
+    /// <summary>
+    /// Common entity data used for parameterized tests across entity types.
+    /// </summary>
+    public static TheoryData<IEntity> EntityData =>
+    [
+        new Book("1984", "George Orwell"),
+        new Employee(new FullName("Homer", null, "Simpson"), 52000f),
+        new Student(new FullName("Bart", null, "Simpson"), 0.1f)
+    ];
 
-        //Assert
-        Assert.False(storage.Contains(margeStudent));
+    [Fact]
+    public void Add_DifferentEntityTypesWithSameName_ReturnsFalseOnContains()
+    {
+        // Arrange
+        Storage storage = new();
+        Employee employee = new(new FullName("Marge", null, "Simpson"), 60000f);
+        Student student = new(new FullName("Marge", null, "Simpson"), 3.0f);
+
+        // Act
+        storage.Add(employee);
+
+        // Assert
+        Assert.False(storage.Contains(student));
     }
-    [Fact]
-    public void Get_MaintainsName_Success()
+
+    [Theory]
+    [MemberData(nameof(EntityData))]
+    public void Add_ThenContains_ReturnsTrue(IEntity entity)
     {
-        //Arrange
-        Storage storage = new ();
-        Student bartStudent = new (new FullName("Bart", null, "Simpson"), 0.1f);
+        // Arrange
+        Storage storage = new();
 
-        //Act
-        storage.Add(bartStudent);
+        // Act
+        storage.Add(entity);
 
-
-        //Assert
-        //Null override, I expect this should never be null!
-        Assert.Equal(storage.Get(bartStudent.Id)!.Name, bartStudent.Name); 
+        // Assert
+        Assert.True(storage.Contains(entity));
     }
-    [Fact]
-    public void AddRemoveAdd_Student_Success()
+
+    [Theory]
+    [MemberData(nameof(EntityData))]
+    public void Get_ExistingEntity_ReturnsEntityWithSameIdAndName(IEntity entity)
     {
-        //Arrange
-        Storage storage = new ();
-        Student bartStudent = new (new FullName("Bart", null, "Simpson"), 0.1f);
+        // Arrange
+        Storage storage = new();
+        storage.Add(entity);
 
-        //Act
-        storage.Add(bartStudent);
-        storage.Remove(bartStudent);
-        storage.Add(bartStudent);
+        // Act
+        IEntity? retrieved = storage.Get(entity.Id);
 
-        //Assert
-        //Null override, I expect this should never be null!
-        Assert.Equal(storage.Get(bartStudent.Id)!.Name, bartStudent.Name);
+        // Assert
+        Assert.NotNull(retrieved);
+        Assert.Equal(entity.Id, retrieved!.Id);
+        Assert.Equal(entity.Name, retrieved.Name);
     }
+
     [Fact]
-    public void Remove_StudentFromCrowd_Success()
+    public void Get_UnknownId_ReturnsNull()
     {
-        //Arrange
-        Storage storage = new Storage();
-        Student bartStudent = new (new FullName("Bart", null, "Simpson"), 0.1f);
-        Student milhouseStudent = new (new FullName("Milhouse", "Van", "Houten"),4.0f);
+        // Arrange
+        Storage storage = new();
 
-        //Act
-        storage.Add(bartStudent);
-        storage.Add(milhouseStudent);
-        storage.Remove(bartStudent);
+        // Act & Assert
+        Assert.Null(storage.Get(Guid.NewGuid()));
+    }
 
-        //Assert
-        Assert.Null(storage.Get(bartStudent.Id));
-        Assert.NotNull(storage.Get(milhouseStudent.Id));
+    [Theory]
+    [MemberData(nameof(EntityData))]
+    public void Remove_ExistingEntity_RemovesFromStorage(IEntity entity)
+    {
+        // Arrange
+        Storage storage = new();
+
+        // Act
+        storage.Add(entity);
+        storage.Remove(entity);
+
+        // Assert
+        Assert.Null(storage.Get(entity.Id));
+    }
+
+    [Theory]
+    [MemberData(nameof(EntityData))]
+    public void Remove_OneEntityAmongMany_RemovesOnlySpecifiedEntity(IEntity entityA)
+    {
+        // Arrange
+        Storage storage = new();
+        storage.Add(new Employee(new FullName("Waylon", null, "Smithers"), 58000f));
+        storage.Add(new Book("The Catcher in the Rye", "J.D. Salinger"));
+        storage.Add(new Student(new FullName("Martin", null, "Prince"), 3.9f));
+
+        // Pick another entity type to ensure it's distinct
+        IEntity entityB = entityA switch
+        {
+            Book => new Student(new FullName("Lisa", null, "Simpson"), 4.0f),
+            Employee => new Book("Brave New World", "Aldous Huxley"),
+            _ => new Employee(new FullName("Moe", null, "Szyslak"), 45000f)
+        };
+
+        // Act
+        storage.Add(entityA);
+        storage.Add(entityB);
+        storage.Remove(entityA);
+
+        // Assert
+        Assert.Null(storage.Get(entityA.Id));
+        Assert.NotNull(storage.Get(entityB.Id));
+    }
+
+    [Theory]
+    [MemberData(nameof(EntityData))]
+    public void Remove_UnknownEntity_DoesNothing(IEntity entity)
+    {
+        // Arrange
+        Storage storage = new();
+
+        // Act
+        storage.Remove(entity); // not added
+
+        // Assert
+        Assert.False(storage.Contains(entity));
     }
 }

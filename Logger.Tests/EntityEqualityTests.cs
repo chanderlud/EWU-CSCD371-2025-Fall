@@ -1,6 +1,6 @@
-﻿namespace Logger.Tests;
+﻿using Xunit;
 
-using Xunit;
+namespace Logger.Tests;
 
 public class EntityEqualityTests
 {
