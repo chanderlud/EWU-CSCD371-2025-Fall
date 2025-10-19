@@ -48,7 +48,7 @@ public class FullNameTests
     }
 
     [Fact]
-    public void Equality_ValidNames_BehavesAsDataEquality()
+    public void Equality_ValidFullNames_UsesValueEquality()
     {
         FullName name1 = new("John", "Paul", "Jones");
         FullName name2 = new("John", "Paul", "Jones");
