@@ -12,7 +12,11 @@ public record class Book : EntityBase
 
     public Book(string title, string author)
     {
-        Title = title;
-        Author = author;
+        Title = string.IsNullOrWhiteSpace(title)
+                ? throw new ArgumentException($"'{nameof(title)}' cannot be null or whitespace.", nameof(title))
+                : title;
+        Author = string.IsNullOrWhiteSpace(author)
+                ? throw new ArgumentException($"'{nameof(author)}' cannot be null or whitespace.", nameof(author))
+                : author;
     }
 }
