@@ -27,7 +27,7 @@ Read **Chapters 9 - Introducing Structs and Records & Chapter 10 - Well Formed T
   - Test that the equality behavior on these entities behaves as expected. ✔
   - Provide a comment on each interface method explaining why you implemented it implicitly or explicitly.
 - Unit test the Storage class using various entities to ensure that there are no bugs. ✔
-- Code review (using TODO: comments if there are any issues - which there may not be) all logger-related classes.)
+- Code review (using TODO: comments if there are any issues - which there may not be) all logger-related classes.) ✔
   - Pay special attention to the CreateLogger methods throughout.
 
 ## Fundamentals
@@ -38,9 +38,9 @@ Read **Chapters 9 - Introducing Structs and Records & Chapter 10 - Well Formed T
   - Ensure that you turn on code analysis for all projects(`EnableNETAnalyzers`) ✔
   - Ensure that you turn on `EnforceCodeStyleInBuild` ✔
   - Ensure that you turn on Nullability (`Nullable`) ✔
-- **Ensure there are no errors or warnings (including code analysis warnings)** ❌✔
-- **All of the above should be unit tested** ❌✔
-- **Choose simplicity over complexity** ❌✔
+- **Ensure there are no errors or warnings (including code analysis warnings)** ✔
+- **All of the above should be unit tested** ✔
+- **Choose simplicity over complexity** ✔
 
 ## Extra Credit
 
