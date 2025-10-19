@@ -2,7 +2,7 @@
 
 // We do not implement ILogger here because you can
 // only have abstract static methods on interfaces.
-public abstract class BaseLogger
+public abstract class BaseLogger: ILogger
 {
     public string LogSource { get; }
     public BaseLogger(string logSource) => LogSource = string.IsNullOrWhiteSpace(logSource)
@@ -12,5 +12,5 @@ public abstract class BaseLogger
     public abstract void Log(LogLevel logLevel, string message);
 
     // You can only have abstract static methods on interfaces.
-    // public abstract static ILogger CreateLogger(in ILoggerConfiguration configuration);
+    public abstract ILogger CreateLogger(in ILoggerConfiguration configuration);
 }

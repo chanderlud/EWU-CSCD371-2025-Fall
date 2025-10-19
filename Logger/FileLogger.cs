@@ -1,6 +1,6 @@
 ﻿namespace Logger;
 
-public class FileLogger : BaseLogger, ILogger
+public class FileLogger : BaseLogger
 {
     private FileInfo File { get; }
 
@@ -10,8 +10,9 @@ public class FileLogger : BaseLogger, ILogger
 
     public FileLogger(FileLoggerConfiguration configuration) : this(configuration.LogSource, configuration.FilePath) {}
 
-    static ILogger ILogger.CreateLogger(in ILoggerConfiguration logggerConfiguration) => 
+    public override ILogger CreateLogger(in ILoggerConfiguration logggerConfiguration) => 
         logggerConfiguration is FileLoggerConfiguration configuration
+            // TODO: CreateLogger call could be simplified to `new FileLogger(configuration)` for improved readability. Additionally, after this change 
             ? CreateLogger(configuration)
             : throw new ArgumentException("Invalid configuration type", nameof(logggerConfiguration));
 
