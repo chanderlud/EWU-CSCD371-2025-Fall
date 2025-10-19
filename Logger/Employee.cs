@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logger;
+﻿namespace Logger;
 
 public record class Employee : Person
 {
-    public Employee(FullName name):base(name)
+    public float Salary { get; init; }
+
+    public Employee(FullName fullName, float salary) : base(fullName)
     {
-        //TODO:Implement something specific to employee here
+        if (salary <= 0) throw new ArgumentException("Salary must be greater than 0");
+        Salary = salary;
     }
 }

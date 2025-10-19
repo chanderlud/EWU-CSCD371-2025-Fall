@@ -11,7 +11,7 @@ public class StorageTests
     {
         //Arrange
         Storage storage = new ();
-        Employee marge = new (new FullName("Marge", null, "Simpson"));
+        Employee marge = new (new FullName("Marge", null, "Simpson"), 60000f);
         Student margeStudent = new (new FullName("Marge", null, "Simpson"), 3.0f);
         //Act
         storage.Add(marge);

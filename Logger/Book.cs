@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logger;
+﻿namespace Logger;
 
 public record class Book : EntityBase
 {
-    private readonly string _Title;
-    public override string Name => _Title;
-    public Book(string title)
+    private string Title { get; init; }
+    private string Author { get; init; }
+
+    /// <summary>
+    /// Implemented implicitly since Name is part of a Book's public identity
+    /// </summary>
+    public override string Name => $"{Title} by {Author}";
+
+    public Book(string title, string author)
     {
-        _Title = title;
+        Title = title;
+        Author = author;
     }
 }
