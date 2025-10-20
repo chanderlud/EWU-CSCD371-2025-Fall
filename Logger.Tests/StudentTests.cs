@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Logger.Entities.People;
+using Xunit;
 
 namespace Logger.Tests;
 
@@ -12,7 +13,7 @@ public class StudentTests
 
         Assert.Equal(name, student.FullName);
         Assert.Equal("Lisa Simpson", student.Name);
-        Assert.Equal(4.0f, student.GPA);
+        Assert.Equal(4.0f, student.Gpa);
     }
 
     [Theory]
@@ -21,6 +22,6 @@ public class StudentTests
     public void Constructor_InvalidGpa_ThrowsArgumentException(float gpa)
     {
         FullName name = new("Milhouse", null, "Van Houten");
-        Assert.Throws<ArgumentException>(() => new Student(name, gpa));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new Student(name, gpa));
     }
 }

@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Logger.Entities.People;
+using Xunit;
 
 namespace Logger.Tests;
 

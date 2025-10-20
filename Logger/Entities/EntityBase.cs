@@ -1,4 +1,4 @@
-﻿namespace Logger;
+﻿namespace Logger.Entities;
 
 /// <summary>
 /// EntityBase implicitly implements IEntity because Id and Name 

@@ -1,4 +1,6 @@
-﻿namespace Logger;
+﻿using Logger.Entities;
+
+namespace Logger.Entities.People;
 
 public abstract record class Person : EntityBase
 {

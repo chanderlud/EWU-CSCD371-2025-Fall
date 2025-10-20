@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Logger.Entities.People;
+using Xunit;
 
 namespace Logger.Tests;
 
@@ -21,6 +22,6 @@ public class EmployeeTests
     public void Constructor_InvalidSalary_ThrowsArgumentException(float salary)
     {
         FullName name = new("Carl", null, "Carlson");
-        Assert.Throws<ArgumentException>(() => new Employee(name, salary));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new Employee(name, salary));
     }
 }

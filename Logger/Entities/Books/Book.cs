@@ -1,4 +1,6 @@
-﻿namespace Logger;
+﻿using Logger.Entities;
+
+namespace Logger.Entities.Books;
 
 public record class Book : EntityBase
 {
