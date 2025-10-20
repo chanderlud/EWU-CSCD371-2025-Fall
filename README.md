@@ -44,7 +44,7 @@ Read **Chapters 9 - Introducing Structs and Records & Chapter 10 - Well Formed T
 
 ## Extra Credit
 
-- Refactor your project files to put common properties and/or items into a single file. ❌✔
+- Refactor your project files to put common properties and/or items into a single file. ✔
 - Convert `ILogger.CreateLogger` to a generic method. ❌✔
   - Returns the logger classes type that is to be created. ❌✔
   - Has a type parameter for the configuration type ❌✔
