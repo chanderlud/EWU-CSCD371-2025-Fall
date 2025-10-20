@@ -20,7 +20,7 @@ public record class FullName
 
     public override string ToString()
     {
-        // space-seperated names, ignoring null or empty
+        // space-separated names, ignoring null or empty
         return string.Join(" ", new[] { First, Middle, Last }.Where(s => !string.IsNullOrWhiteSpace(s)));
     }
 }
