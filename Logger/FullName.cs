@@ -1,7 +1,7 @@
 ﻿namespace Logger;
 
 /// <summary>
-/// The First Middle and Last variables are defined as 'refrence' types.
+/// The First Middle and Last variables are defined as 'reference' types.
 /// 
 /// The record is immutable since it consists solely of immutable string fields.
 /// </summary>
