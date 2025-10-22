@@ -8,27 +8,24 @@ public class BookTests
     [Fact]
     public void Constructor_ValidArguments_SetsProperties()
     {
-        Book book = new("1984", "George Orwell");
+        Book book = new("1984", new FullName("George", null, "Orwell"));
 
         Assert.Equal("1984 by George Orwell", book.Name);
         Assert.NotEqual(Guid.Empty, book.Id);
     }
 
     [Theory]
-    [InlineData(null, "Author")]
-    [InlineData("", "Author")]
-    [InlineData("   ", "Author")]
-    public void Constructor_InvalidTitle_ThrowsArgumentException(string? title, string author)
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void Constructor_InvalidTitle_ThrowsArgumentException(string? title)
     {
-        Assert.Throws<ArgumentException>(() => new Book(title!, author));
+        Assert.Throws<ArgumentException>(() => new Book(title!, new FullName("A", "B", "C")));
     }
 
-    [Theory]
-    [InlineData("Title", null)]
-    [InlineData("Title", "")]
-    [InlineData("Title", "   ")]
-    public void Constructor_InvalidAuthor_ThrowsArgumentException(string title, string? author)
+    [Fact]
+    public void Constructor_InvalidAuthor_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentException>(() => new Book(title, author!));
+        Assert.Throws<ArgumentNullException>(() => new Book("Title", null!));
     }
 }

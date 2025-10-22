@@ -13,7 +13,7 @@ public abstract record class Person : EntityBase
 
     public Person(FullName name)
     {
-        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
         FullName = name;
     }
 }

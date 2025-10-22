@@ -9,7 +9,7 @@ public class EntityEqualityTests
     [Fact]
     public void Books_WithSameTitleAuthorAndId_AreEqual()
     {
-        Book book1 = new("1984", "George Orwell");
+        Book book1 = new("1984", new FullName("George", null, "Orwell"));
         Book book2 = book1 with { }; // clone book1
 
         Assert.Equal(book1, book2);
@@ -20,8 +20,8 @@ public class EntityEqualityTests
     [Fact]
     public void Books_WithDifferentIds_AreNotEqual()
     {
-        Book book1 = new("1984", "George Orwell");
-        Book book2 = new("1984", "George Orwell");
+        Book book1 = new("1984", new FullName("George", null, "Orwell"));
+        Book book2 = new("1984", new FullName("George", null, "Orwell"));
 
         Assert.NotEqual(book1, book2);
         Assert.True(book1 != book2);
@@ -30,8 +30,8 @@ public class EntityEqualityTests
     [Fact]
     public void Books_WithDifferentAuthors_AreNotEqual()
     {
-        Book book1 = new("1984", "George Orwell");
-        Book book2 = new("1984", "Orwell, Jr.");
+        Book book1 = new("1984", new FullName("George", null, "Orwell"));
+        Book book2 = new("1984", new FullName("George", "Jr.", "Orwell"));
 
         Assert.NotEqual(book1, book2);
         Assert.True(book1 != book2);
@@ -80,7 +80,7 @@ public class EntityEqualityTests
     [Fact]
     public void Book_StudentOrEmployee_AreNotEqual()
     {
-        Book book = new("1984", "George Orwell");
+        Book book = new("1984", new FullName("George", null, "Orwell"));
         Student student = new(new FullName("George", null, "Orwell"), 3.5f);
         Employee employee = new(new FullName("George", null, "Orwell"), 50000);
 

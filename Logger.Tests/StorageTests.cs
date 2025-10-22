@@ -11,7 +11,7 @@ public class StorageTests
     /// </summary>
     public static TheoryData<IEntity> EntityData =>
     [
-        new Book("1984", "George Orwell"),
+        new Book("1984", new FullName("George", null, "Orwell")),
         new Employee(new FullName("Homer", null, "Simpson"), 52000f),
         new Student(new FullName("Bart", null, "Simpson"), 0.1f)
     ];
@@ -94,14 +94,14 @@ public class StorageTests
         // Arrange
         Storage storage = new();
         storage.Add(new Employee(new FullName("Waylon", null, "Smithers"), 58000f));
-        storage.Add(new Book("The Catcher in the Rye", "J.D. Salinger"));
+        storage.Add(new Book("The Catcher in the Rye", new FullName("J.D.", null, "Salinger")));
         storage.Add(new Student(new FullName("Martin", null, "Prince"), 3.9f));
 
         // Pick another entity type to ensure it's distinct
         IEntity entityB = entityA switch
         {
             Book => new Student(new FullName("Lisa", null, "Simpson"), 4.0f),
-            Employee => new Book("Brave New World", "Aldous Huxley"),
+            Employee => new Book("Brave New World", new FullName("Aldous", null, "Huxley")),
             _ => new Employee(new FullName("Moe", null, "Szyslak"), 45000f)
         };
 
