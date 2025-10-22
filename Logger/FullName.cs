@@ -1,7 +1,7 @@
 ﻿namespace Logger;
 
 /// <summary>
-/// The First Middle and Last variables are defined as 'refrence' types.
+/// The First Middle and Last variables are defined as 'reference' types.
 /// 
 /// The record is immutable since it consists solely of immutable string fields.
 /// </summary>
@@ -20,7 +20,7 @@ public record class FullName
 
     public override string ToString()
     {
-        // space-seperated names, ignoring null or empty
+        // space-separated names, ignoring null or empty
         return string.Join(" ", new[] { First, Middle, Last }.Where(s => !string.IsNullOrWhiteSpace(s)));
     }
 }
