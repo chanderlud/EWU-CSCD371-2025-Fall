@@ -8,9 +8,9 @@ Chapters 11, 12
 
 ## Instructions
 
-- Create a *class library* project called "GenericsHomework.". ❌✔
+- Create a *class library* project called "GenericsHomework.". ✔
 - Create a node class that can contain a value of any type and points to the next node and traversing the next node points back to the first item.
-  - Define the `Node` class
+  - Define the `Node` class ✔
   - The values should be homogeneous.
   - Include a constructor that takes a value.  (No validation is necessary on the value). ❌✔
   - Add a `ToString()` override that writes out the value's `ToString()` result. ❌✔
