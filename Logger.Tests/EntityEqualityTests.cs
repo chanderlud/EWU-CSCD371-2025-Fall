@@ -41,8 +41,8 @@ public class EntityEqualityTests
     public void Students_WithDifferentIds_AreNotEqual()
     {
         FullName fullName = new("Jane", "A.", "Doe");
-        Student s1 = new(fullName, 3.9f);
-        Student s2 = new(fullName, 3.9f);
+        Student s1 = new(fullName, 3.9m);
+        Student s2 = new(fullName, 3.9m);
 
         Assert.NotEqual(s1, s2);
     }
@@ -51,8 +51,8 @@ public class EntityEqualityTests
     public void Students_WithDifferentGPA_AreNotEqual()
     {
         FullName name = new("Jane", null, "Doe");
-        var s1 = new Student(name, 3.5f);
-        var s2 = new Student(name, 2.5f);
+        var s1 = new Student(name, 3.5m);
+        var s2 = new Student(name, 2.5m);
 
         Assert.NotEqual(s1, s2);
     }
@@ -81,7 +81,7 @@ public class EntityEqualityTests
     public void Book_StudentOrEmployee_AreNotEqual()
     {
         Book book = new("1984", new FullName("George", null, "Orwell"));
-        Student student = new(new FullName("George", null, "Orwell"), 3.5f);
+        Student student = new(new FullName("George", null, "Orwell"), 3.5m);
         Employee employee = new(new FullName("George", null, "Orwell"), 50000);
 
         Assert.False(book.Equals(student));

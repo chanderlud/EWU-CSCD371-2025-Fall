@@ -9,17 +9,17 @@ public class EmployeeTests
     public void Constructor_ValidArguments_SetsProperties()
     {
         FullName name = new("Homer", "J", "Simpson");
-        Employee employee = new(name, 60000f);
+        Employee employee = new(name, 60000);
 
         Assert.Equal(name, employee.FullName);
         Assert.Equal("Homer J Simpson", employee.Name);
-        Assert.Equal(60000f, employee.Salary);
+        Assert.Equal(60000, employee.Salary);
     }
 
     [Theory]
-    [InlineData(0f)]
-    [InlineData(-10f)]
-    public void Constructor_InvalidSalary_ThrowsArgumentException(float salary)
+    [InlineData(0)]
+    [InlineData(-10)]
+    public void Constructor_InvalidSalary_ThrowsArgumentException(decimal salary)
     {
         FullName name = new("Carl", null, "Carlson");
         Assert.Throws<ArgumentOutOfRangeException>(() => new Employee(name, salary));

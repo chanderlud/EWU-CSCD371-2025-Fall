@@ -9,17 +9,17 @@ public class StudentTests
     public void Constructor_ValidArguments_SetsProperties()
     {
         FullName name = new("Lisa", null, "Simpson");
-        Student student = new(name, 4.0f);
+        Student student = new(name, 4);
 
         Assert.Equal(name, student.FullName);
         Assert.Equal("Lisa Simpson", student.Name);
-        Assert.Equal(4.0f, student.Gpa);
+        Assert.Equal(4, student.Gpa);
     }
 
     [Theory]
-    [InlineData(-1f)]
-    [InlineData(4.1f)]
-    public void Constructor_InvalidGpa_ThrowsArgumentException(float gpa)
+    [InlineData(-1)]
+    [InlineData(4.1)]
+    public void Constructor_InvalidGpa_ThrowsArgumentException(decimal gpa)
     {
         FullName name = new("Milhouse", null, "Van Houten");
         Assert.Throws<ArgumentOutOfRangeException>(() => new Student(name, gpa));
