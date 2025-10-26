@@ -51,6 +51,5 @@ public class Node<T>
     override public string ToString()
     {
         return Value?.ToString() ?? "null";
-
     }
 }
