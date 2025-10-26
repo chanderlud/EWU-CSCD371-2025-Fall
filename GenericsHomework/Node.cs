@@ -11,6 +11,7 @@ public class Node<T>
         Next = this;
     }
 
+
     public bool Exists(T value)
     {
         Node<T> current = this;
@@ -23,5 +24,11 @@ public class Node<T>
             current = current.Next;
         } while (current != this);
         return false;
+    }
+
+    override public string ToString()
+    {
+        return Value?.ToString() ?? "null";
+
     }
 }
