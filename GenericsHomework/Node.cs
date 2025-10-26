@@ -1,6 +1,8 @@
-﻿namespace GenericsHomework;
+﻿using System.Collections;
 
-public class Node<T>
+namespace GenericsHomework;
+
+public class Node<T> : ICollection<T>
 {
     public T Value { get; set; }
     public Node<T> Next { get; private set; }
@@ -11,18 +13,116 @@ public class Node<T>
         Next = this;
     }
 
-    public void Append(T value)
+    // ICollection<T> members
+    public int Count
     {
-        if (Exists(value))
+        get
         {
-            throw new ArgumentException("Value already exists, no duplicates allowed.", nameof(value));
+            int count = 0;
+            Node<T> current = this;
+            do
+            {
+                count++;
+                current = current.Next;
+            } while (current != this);
+            return count;
         }
-        Node<T> newNode = new(value)
-        {
-            Next = Next
-        };
-        Next = newNode;
     }
+
+    public bool IsReadOnly => false;
+
+    public void Add(T item)
+    {
+        // Insert after current node (end of circular list)
+        Node<T> newNode = new Node<T>(item);
+
+        Node<T> current = this;
+        while (current.Next != this)
+        {
+            current = current.Next;
+        }
+
+        current.Next = newNode;
+        newNode.Next = this;
+    }
+
+    public void Clear()
+    {
+        Value = default!;
+        Next = this;
+    }
+
+    public bool Contains(T item)
+    {
+        Node<T> current = this;
+        do
+        {
+            if (item is null && current.Value is null)
+                return true;
+            if (current.Value is not null && current.Value.Equals(item))
+                return true;
+
+            current = current.Next;
+        } while (current != this);
+
+        return false;
+    }
+
+    public void CopyTo(T[] array, int arrayIndex)
+    {
+        if (array is null)
+            throw new ArgumentNullException(nameof(array));
+
+        Node<T> current = this;
+        int i = arrayIndex;
+        do
+        {
+            array[i++] = current.Value;
+            current = current.Next;
+        } while (current != this);
+    }
+
+    public bool Remove(T item)
+    {
+        Node<T> current = this;
+        Node<T> previous = null!;
+
+        do
+        {
+            if ((item is null && current.Value is null) ||
+                (current.Value is not null && current.Value.Equals(item)))
+            {
+                if (previous != null)
+                {
+                    previous.Next = current.Next;
+                }
+                else
+                {
+                    // if removing self, replace value with next node
+                    Value = current.Next.Value;
+                    Next = current.Next.Next;
+                }
+                return true;
+            }
+
+            previous = current;
+            current = current.Next;
+        } while (current != this);
+
+        return false;
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        Node<T> current = this;
+        do
+        {
+            yield return current.Value;
+            current = current.Next;
+        } while (current != this);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public bool Exists(T value)
     {
@@ -32,7 +132,8 @@ public class Node<T>
             if (value is null && current.Value is null)
             {
                 return true;
-            } else if (current.Value is not null && current.Value.Equals(value))
+            }
+            else if (current.Value is not null && current.Value.Equals(value))
             {
                 return true;
             }
@@ -41,16 +142,5 @@ public class Node<T>
         return false;
     }
 
-    public void Clear()
-    {
-        // this is suffecient for garbage collection to clean up the nodes because there are no external references to them
-        // the nodes do not need to have their Next pointers set to null individually as long as there are no external references to them
-        Next = this;
-    }
-
-    override public string ToString()
-    {
-        return Value?.ToString() ?? "null";
-
-    }
+    public override string ToString() => Value?.ToString() ?? "null";
 }
