@@ -11,6 +11,13 @@ public class Node<T>
         Next = this;
     }
 
+    public void Append(T value)
+    {
+        Node<T> newNode = new(value);
+        newNode.Next = this.Next;
+        this.Next = newNode;
+    }
+
 
     public bool Exists(T value)
     {
