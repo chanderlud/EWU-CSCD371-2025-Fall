@@ -11,6 +11,11 @@ public class Node<T>
         Next = this;
     }
 
+    public void Clear()
+    {
+          Next = this;
+    }
+
     override public string ToString()
     {
         return Value?.ToString() ?? "null";
