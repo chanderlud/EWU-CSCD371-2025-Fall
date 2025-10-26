@@ -96,7 +96,6 @@ public class NodeTests
         Assert.False(node.Exists(3));
         Assert.True(node.Exists(1));
     }
-}
 
     [Fact]
     public void Append_NewValue_AppendsNodeSuccessfully()
