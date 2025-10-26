@@ -79,4 +79,3 @@ public class NodeTests
         // Assert
         Assert.False(exists);
     }
-}

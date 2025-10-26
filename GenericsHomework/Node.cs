@@ -11,7 +11,6 @@ public class Node<T>
         Next = this;
     }
 
-
     public bool Exists(T value)
     {
         Node<T> current = this;
@@ -31,7 +30,9 @@ public class Node<T>
 
     public void Clear()
     {
-          Next = this;
+        // this is suffecient for garbage collection to clean up the nodes because there are no external references to them
+        // the nodes do not need to have their Next pointers set to null individually as long as there are no external references to them
+        Next = this;
     }
 
     override public string ToString()
