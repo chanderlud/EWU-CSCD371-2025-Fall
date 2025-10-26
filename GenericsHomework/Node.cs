@@ -10,4 +10,9 @@ public class Node<T>
         Value = value;
         Next = this;
     }
+
+    override public string ToString()
+    {
+        return Value?.ToString() ?? "null";
+    }
 }
