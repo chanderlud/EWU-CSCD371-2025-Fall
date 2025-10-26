@@ -11,6 +11,19 @@ public class Node<T>
         Next = this;
     }
 
+    public void Append(T value)
+    {
+        if (Exists(value))
+        {
+            throw new ArgumentException("Value already exists, no duplicates allowed.", nameof(value));
+        }
+        Node<T> newNode = new(value)
+        {
+            Next = Next
+        };
+        Next = newNode;
+    }
+
     public bool Exists(T value)
     {
         Node<T> current = this;

@@ -79,3 +79,21 @@ public class NodeTests
         // Assert
         Assert.False(exists);
     }
+
+    [Fact]
+    public void Clear_NodeWithMultipleValues_ClearsAllButHead()
+    {
+        // Arrange
+        Node<int> node = new(1);
+        node.Append(2);
+        node.Append(3);
+
+        // Act
+        node.Clear();
+
+        // Assert
+        Assert.False(node.Exists(2));
+        Assert.False(node.Exists(3));
+        Assert.True(node.Exists(1));
+    }
+}
