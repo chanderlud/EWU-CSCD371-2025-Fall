@@ -40,4 +40,43 @@ public class NodeTests
         // Assert
         Assert.Equal("100", result);
     }
+
+    [Fact]
+    public void Exists_NodeWithSameIntValue_ReturnsTrue()
+    {
+        // Arrange
+        Node<string> node = new("test");
+
+        // Act
+        bool exists = node.Exists("test");
+
+        // Assert
+        Assert.True(exists);
+    }
+
+    [Fact]
+    public void Exists_NodeWithSameNullValue_ReturnsTrue()
+    {
+        // Arrange
+        Node<string> node = new(null!);
+
+        // Act
+        bool exists = node.Exists(null!);
+
+        // Assert
+        Assert.True(exists);
+    }
+
+    [Fact]
+    public void Exists_NodeWithDifferentValue_ReturnsFalse()
+    {
+        // Arrange
+        Node<int> node = new(10);
+
+        // Act
+        bool exists = node.Exists(100);
+
+        // Assert
+        Assert.False(exists);
+    }
 }
