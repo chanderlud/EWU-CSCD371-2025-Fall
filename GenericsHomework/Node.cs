@@ -10,4 +10,18 @@ public class Node<T>
         Value = value;
         Next = this;
     }
+
+    public bool Exists(T value)
+    {
+        Node<T> current = this;
+        do
+        {
+            if (current.Value!.Equals(value))
+            {
+                return true;
+            }
+            current = current.Next;
+        } while (current != this);
+        return false;
+    }
 }
