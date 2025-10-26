@@ -79,4 +79,28 @@ public class NodeTests
         // Assert
         Assert.False(exists);
     }
+
+    [Fact]
+    public void Append_newValue_AppendsNodeSuccessfully()
+    {
+        // Arrange
+        Node<int> node = new(1);
+
+        // Act
+        node.Append(2);
+
+        // Assert
+        Assert.Equal(2, node.Next.Value);
+        Assert.Equal(node, node.Next.Next);
+    }
+
+    [Fact]
+    public void Append_duplicateValue_ThrowsArgumentException()
+    {
+        // Arrange
+        Node<int> node = new(1);
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => node.Append(1));
+    }
 }
