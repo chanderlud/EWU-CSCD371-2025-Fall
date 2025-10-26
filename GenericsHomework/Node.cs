@@ -12,8 +12,7 @@ public class Node<T> : ICollection<T>
         Value = value;
         Next = this;
     }
-
-    // ICollection<T> members
+    
     public int Count
     {
         get
@@ -33,7 +32,6 @@ public class Node<T> : ICollection<T>
 
     public void Add(T item)
     {
-        // Insert after current node (end of circular list)
         Node<T> newNode = new Node<T>(item);
 
         Node<T> current = this;
@@ -98,7 +96,6 @@ public class Node<T> : ICollection<T>
                 }
                 else
                 {
-                    // if removing self, replace value with next node
                     Value = current.Next.Value;
                     Next = current.Next.Next;
                 }
