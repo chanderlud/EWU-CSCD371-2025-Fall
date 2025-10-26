@@ -13,6 +13,10 @@ public class Node<T>
 
     public void Append(T value)
     {
+        if (Exists(value))
+        {
+            throw new ArgumentException("Value already exists, no duplicates allowed.");
+        }
         Node<T> newNode = new(value);
         newNode.Next = this.Next;
         this.Next = newNode;
