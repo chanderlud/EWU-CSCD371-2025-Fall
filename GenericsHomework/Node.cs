@@ -1,32 +1,32 @@
 ﻿namespace GenericsHomework;
 
-public class Node<T>
+public class Node<TNodeValue>
 {
-    public T Value { get; set; }
-    public Node<T> Next { get; private set; }
+    public TNodeValue Value { get; set; }
+    public Node<TNodeValue> Next { get; private set; }
 
-    public Node(T value)
+    public Node(TNodeValue value)
     {
         Value = value;
         Next = this;
     }
 
-    public void Append(T value)
+    public void Append(TNodeValue value)
     {
         if (Exists(value))
         {
             throw new ArgumentException("Value already exists, no duplicates allowed.", nameof(value));
         }
-        Node<T> newNode = new(value)
+        Node<TNodeValue> newNode = new(value)
         {
             Next = Next
         };
         Next = newNode;
     }
 
-    public bool Exists(T value)
+    public bool Exists(TNodeValue value)
     {
-        Node<T> current = this;
+        Node<TNodeValue> current = this;
         do
         {
             if (value is null && current.Value is null)
