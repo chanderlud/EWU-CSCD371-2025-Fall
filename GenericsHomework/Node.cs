@@ -43,7 +43,7 @@ public class Node<TNodeValue>
 
     public void Clear()
     {
-        // this is suffecient for garbage collection to clean up the nodes because there are no external references to them
+        // this is sufficient for garbage collection to clean up the nodes because there are no external references to them
         // the nodes do not need to have their Next pointers set to null individually as long as there are no external references to them
         Next = this;
     }
@@ -51,6 +51,5 @@ public class Node<TNodeValue>
     override public string ToString()
     {
         return Value?.ToString() ?? "null";
-
     }
 }
