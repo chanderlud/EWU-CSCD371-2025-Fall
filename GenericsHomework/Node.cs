@@ -24,7 +24,7 @@ public class Node<T>
         Next = newNode;
     }
 
-    public bool Exists(T value)
+    public bool Exists(T value) // 5
     {
         Node<T> current = this;
         do

@@ -1,21 +1,22 @@
 ﻿using GenericsHomework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GenericsHomeworkTests;
-
+[TestClass]
 public class NodeTests
 {
-    [Fact]
+    [TestMethod]
     public void Constructor_SingleIntNode_PointsToItself()
     {
         // Arrange & Act
         Node<int> node = new(0);
 
         // Assert
-        Assert.Equal(0, node.Value);
-        Assert.Equal(node, node.Next);
+        Assert.AreEqual<int>(0, node.Value);
+        Assert.AreEqual<Node<int>>(node, node.Next);
     }
 
-    [Fact]
+    [TestMethod]
     public void ToString_NullValue_ReturnsNullString()
     {
         // Arrange
@@ -25,10 +26,10 @@ public class NodeTests
         string result = node.ToString();
 
         // Assert
-        Assert.Equal("null", result);
+        Assert.AreEqual<string>("null", result);
     }
 
-    [Fact]
+    [TestMethod]
     public void ToString_IntValue_ReturnsIntString()
     {
         // Arrange
@@ -38,10 +39,10 @@ public class NodeTests
         string result = node.ToString();
 
         // Assert
-        Assert.Equal("100", result);
+        Assert.AreEqual<string>("100", result);
     }
 
-    [Fact]
+    [TestMethod]
     public void Exists_NodeWithSameIntValue_ReturnsTrue()
     {
         // Arrange
@@ -51,10 +52,10 @@ public class NodeTests
         bool exists = node.Exists("test");
 
         // Assert
-        Assert.True(exists);
+        Assert.AreEqual<bool>(true, exists);
     }
 
-    [Fact]
+    [TestMethod]
     public void Exists_NodeWithSameNullValue_ReturnsTrue()
     {
         // Arrange
@@ -64,10 +65,10 @@ public class NodeTests
         bool exists = node.Exists(null!);
 
         // Assert
-        Assert.True(exists);
+        Assert.AreEqual<bool>(true, exists);
     }
 
-    [Fact]
+    [TestMethod]    
     public void Exists_NodeWithDifferentValue_ReturnsFalse()
     {
         // Arrange
@@ -77,10 +78,10 @@ public class NodeTests
         bool exists = node.Exists(100);
 
         // Assert
-        Assert.False(exists);
+        Assert.AreEqual<bool>(false, exists);
     }
 
-    [Fact]
+    [TestMethod]
     public void Clear_NodeWithMultipleValues_ClearsAllButHead()
     {
         // Arrange
@@ -92,12 +93,12 @@ public class NodeTests
         node.Clear();
 
         // Assert
-        Assert.False(node.Exists(2));
-        Assert.False(node.Exists(3));
-        Assert.True(node.Exists(1));
+        Assert.AreEqual<bool>(false, node.Exists(2));
+        Assert.AreEqual<bool>(false, node.Exists(3));
+        Assert.AreEqual<bool>(true, node.Exists(1));
     }
 
-    [Fact]
+    [TestMethod]
     public void Append_NewValue_AppendsNodeSuccessfully()
     {
         // Arrange
@@ -107,17 +108,17 @@ public class NodeTests
         node.Append(2);
 
         // Assert
-        Assert.Equal(2, node.Next.Value);
-        Assert.Equal(node, node.Next.Next);
+        Assert.AreEqual<int>(2, node.Next.Value);
+        Assert.AreEqual<Node<int>>(node, node.Next.Next);
     }
 
-    [Fact]
+    [TestMethod]
     public void Append_DuplicateValue_ThrowsArgumentException()
     {
         // Arrange
         Node<int> node = new(1);
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => node.Append(1));
+        Assert.ThrowsException<ArgumentException>(() => node.Append(1));
     }
 }
