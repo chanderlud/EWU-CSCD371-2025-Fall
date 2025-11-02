@@ -6,7 +6,7 @@ public class CalculatorTests
     [TestMethod]
     public void MathematicalOperations_ExposesFourOperators_BehaveCorrectly()
     {
-        var ops = Calculator<int>.MathematicalOperations;
+        var ops = new Calculator<int>().MathematicalOperations;
 
         Assert.AreEqual(4, ops.Count, "Expected exactly four operators.");
         CollectionAssert.AreEquivalent(new List<char> { '+', '-', '*', '/' }, new List<char>(ops.Keys));

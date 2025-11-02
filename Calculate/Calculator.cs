@@ -4,7 +4,7 @@ namespace Calculate;
 
 public class Calculator<TOperand> where TOperand : INumber<TOperand>
 {
-    public static IReadOnlyDictionary<char, Func<TOperand, TOperand, TOperand>> MathematicalOperations { get; }
+    public IReadOnlyDictionary<char, Func<TOperand, TOperand, TOperand>> MathematicalOperations { get; }
             = new Dictionary<char, Func<TOperand, TOperand, TOperand>>
             {
                 ['+'] = Add,
