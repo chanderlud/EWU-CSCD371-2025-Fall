@@ -9,7 +9,7 @@ public class Program
 
     public void Run()
     {
-        Calculator<int> calculator = new();
+        Calculator<float> calculator = new();
         bool run = true;
 
         while (run)
@@ -22,7 +22,7 @@ public class Program
                 {
                     WriteLine("Goodbye");
                     run = false;
-                } else if (calculator.TryCalculate(equation, out int result))
+                } else if (calculator.TryCalculate(equation, out float result))
                 {
                     WriteLine($"Result: {result}");
                 }
