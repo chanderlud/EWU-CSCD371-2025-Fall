@@ -1,11 +1,9 @@
-﻿using System.Numerics;
+﻿namespace Calculate;
 
-namespace Calculate;
-
-public class Calculator<TOperand> where TOperand : INumber<TOperand>
+public class Calculator
 {
-    public IReadOnlyDictionary<char, Func<TOperand, TOperand, TOperand>> MathematicalOperations { get; }
-            = new Dictionary<char, Func<TOperand, TOperand, TOperand>>
+    public IReadOnlyDictionary<char, Func<int, int, int>> MathematicalOperations { get; }
+            = new Dictionary<char, Func<int, int, int>>
             {
                 ['+'] = Add,
                 ['-'] = Subtract,
@@ -13,24 +11,24 @@ public class Calculator<TOperand> where TOperand : INumber<TOperand>
                 ['/'] = Divide
             };
 
-    public static TOperand Add(TOperand a, TOperand b) => a + b;
+    public static int Add(int a, int b) => a + b;
 
-    public static TOperand Subtract(TOperand a, TOperand b) => a - b;
+    public static int Subtract(int a, int b) => a - b;
 
-    public static TOperand Multiply(TOperand a, TOperand b) => a * b;
+    public static int Multiply(int a, int b) => a * b;
 
-    public static TOperand Divide(TOperand a, TOperand b) => a / b;
+    public static int Divide(int a, int b) => a / b;
 
-    public bool TryCalculate(string calculation, out TOperand result, IFormatProvider? provider = null)
+    public bool TryCalculate(string calculation, out int result)
     {
-        result = TOperand.Zero;
+        result = 0;
         if (string.IsNullOrWhiteSpace(calculation))
             return false;
 
         string[] tokens = calculation.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         List<string> postfix = [];
         Stack<char> operators = new();
-        Stack<TOperand> evaluationStack = new();
+        Stack<int> evaluationStack = new();
 
         Dictionary<char, int> precedence = new()
         {
@@ -42,7 +40,7 @@ public class Calculator<TOperand> where TOperand : INumber<TOperand>
 
         foreach (string token in tokens)
         {
-            if (TOperand.TryParse(token, provider, out _))
+            if (int.TryParse(token, out _))
             {
                 postfix.Add(token);
             }
@@ -66,7 +64,7 @@ public class Calculator<TOperand> where TOperand : INumber<TOperand>
 
         foreach (string token in postfix)
         {
-            if (TOperand.TryParse(token, provider, out TOperand? number))
+            if (int.TryParse(token, out int number))
             {
                 evaluationStack.Push(number);
             }
@@ -76,11 +74,11 @@ public class Calculator<TOperand> where TOperand : INumber<TOperand>
                 if (evaluationStack.Count < 2)
                     return false;
 
-                TOperand b = evaluationStack.Pop();
-                TOperand a = evaluationStack.Pop();
+                int b = evaluationStack.Pop();
+                int a = evaluationStack.Pop();
 
                 // divide by 0 is not allowed
-                if (token[0] == '/' && b == TOperand.Zero)
+                if (token[0] == '/' && b == 0)
                     return false;
 
                 evaluationStack.Push(op(a, b));

@@ -6,7 +6,7 @@ public class CalculatorTests
     [TestMethod]
     public void MathematicalOperations_ExposesFourOperators_BehaveCorrectly()
     {
-        var ops = new Calculator<int>().MathematicalOperations;
+        var ops = new Calculator().MathematicalOperations;
 
         Assert.AreEqual(4, ops.Count, "Expected exactly four operators.");
         CollectionAssert.AreEquivalent(new List<char> { '+', '-', '*', '/' }, new List<char>(ops.Keys));
@@ -20,19 +20,10 @@ public class CalculatorTests
     [TestMethod]
     public void BasicArithmeticMethods_ValidIntInputs_ExpectedResults()
     {
-        Assert.AreEqual<int>(9, Calculator<int>.Add(4, 5));
-        Assert.AreEqual<int>(-1, Calculator<int>.Subtract(4, 5));
-        Assert.AreEqual<int>(20, Calculator<int>.Multiply(4, 5));
-        Assert.AreEqual<int>(2, Calculator<int>.Divide(10, 5));
-    }
-
-    [TestMethod]
-    public void BasicArithmeticMethods_ValidFloatInputs_ExpectedResults()
-    {
-        Assert.AreEqual<float>(3f, Calculator<float>.Add(1.5f, 1.5f));
-        Assert.AreEqual<float>(-1f, Calculator<float>.Subtract(4f, 5f));
-        Assert.AreEqual<float>(20f, Calculator<float>.Multiply(4f, 5f));
-        Assert.AreEqual<float>(5f, Calculator<float>.Divide(10f, 2f));
+        Assert.AreEqual<int>(9, Calculator.Add(4, 5));
+        Assert.AreEqual<int>(-1, Calculator.Subtract(4, 5));
+        Assert.AreEqual<int>(20, Calculator.Multiply(4, 5));
+        Assert.AreEqual<int>(2, Calculator.Divide(10, 5));
     }
 
     [DataTestMethod]
@@ -46,7 +37,7 @@ public class CalculatorTests
     [DataRow("-5", -5)]                        // single negative literal
     public void TryCalculate_ValidExpressions_ReturnTrueAndCorrectResult(string input, int expected)
     {
-        Calculator<int> c = new();
+        Calculator c = new();
         bool ok = c.TryCalculate(input, out var result);
 
         Assert.IsTrue(ok, $"Expected success for '{input}'.");
@@ -56,7 +47,7 @@ public class CalculatorTests
     [TestMethod]
     public void TryCalculate_DivideByZero_ReturnsFalse()
     {
-        Calculator<int> c = new();
+        Calculator c = new();
         bool ok = c.TryCalculate("1 / 0", out var result);
 
         Assert.IsFalse(ok);
@@ -69,7 +60,7 @@ public class CalculatorTests
     [DataRow("   ")]
     public void TryCalculate_NullOrWhitespace_ReturnsFalse(string input)
     {
-        Calculator<int> c = new();
+        Calculator c = new();
         bool ok = c.TryCalculate(input, out var result);
 
         Assert.IsFalse(ok);
@@ -83,7 +74,7 @@ public class CalculatorTests
     [DataRow("2 + ( 3 )")]       // parentheses not supported
     public void TryCalculate_InvalidTokens_ReturnsFalse(string input)
     {
-        Calculator<int> c = new();
+        Calculator c = new();
 
         bool ok = c.TryCalculate(input, out var result);
 
@@ -98,7 +89,7 @@ public class CalculatorTests
     [DataRow("2 3")]             // extra operand left over
     public void TryCalculate_MalformedExpressions_ReturnsFalse(string input)
     {
-        Calculator<int> c = new();
+        Calculator c = new();
 
         bool ok = c.TryCalculate(input, out var result);
 
@@ -109,7 +100,7 @@ public class CalculatorTests
     [TestMethod]
     public void TryCalculate_UnknownOperator_ReturnsFalse()
     {
-        Calculator<int> c = new();
+        Calculator c = new();
 
         bool ok = c.TryCalculate("5 % 2", out var result);
 
