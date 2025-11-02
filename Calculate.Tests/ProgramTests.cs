@@ -1,11 +1,12 @@
-﻿namespace Calculate.Tests
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Calculate.Tests;
+
+[TestClass]
+public sealed class ProgramTests
 {
-    [TestClass]
-    public sealed class ProgramTests
+    [TestMethod]
+    public void TestMethod1()
     {
-        [TestMethod]
-        public void TestMethod1()
-        {
-        }
     }
 }
