@@ -54,7 +54,7 @@ public class Calculator
             }
             else
             {
-                // Invalid token, not an int or operator
+                // Invalid token, not a number or operator
                 return false;
             }
         }
