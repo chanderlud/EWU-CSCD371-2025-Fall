@@ -70,7 +70,7 @@ public class Calculator
             }
             else if (token.Length == 1 && MathematicalOperations.TryGetValue(token[0], out var op))
             {
-                // if two operands are not available, invalid postfix syntax has occured
+                // if two operands are not available, invalid postfix syntax has occurred
                 if (evaluationStack.Count < 2)
                     return false;
 
