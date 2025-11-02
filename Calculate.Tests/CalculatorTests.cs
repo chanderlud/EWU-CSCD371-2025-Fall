@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace Calculate.Tests;
+﻿namespace Calculate.Tests;
 
 [TestClass]
 public class CalculatorTests
@@ -13,19 +11,19 @@ public class CalculatorTests
         Assert.AreEqual(4, ops.Count, "Expected exactly four operators.");
         CollectionAssert.AreEquivalent(new List<char> { '+', '-', '*', '/' }, new List<char>(ops.Keys));
 
-        Assert.AreEqual(5, ops['+'](2, 3));
-        Assert.AreEqual(-1, ops['-'](2, 3));
-        Assert.AreEqual(6, ops['*'](2, 3));
-        Assert.AreEqual(2, ops['/'](6, 3));
+        Assert.AreEqual<int>(5, ops['+'](2, 3));
+        Assert.AreEqual<int>(-1, ops['-'](2, 3));
+        Assert.AreEqual<int>(6, ops['*'](2, 3));
+        Assert.AreEqual<int>(2, ops['/'](6, 3));
     }
 
     [TestMethod]
     public void BasicArithmeticMethods_ValidInputs_ExpectedResults()
     {
-        Assert.AreEqual(9, Calculator<int>.Add(4, 5));
-        Assert.AreEqual(-1, Calculator<int>.Subtract(4, 5));
-        Assert.AreEqual(20, Calculator<int>.Multiply(4, 5));
-        Assert.AreEqual(2, Calculator<int>.Divide(10, 5));
+        Assert.AreEqual<int>(9, Calculator<int>.Add(4, 5));
+        Assert.AreEqual<int>(-1, Calculator<int>.Subtract(4, 5));
+        Assert.AreEqual<int>(20, Calculator<int>.Multiply(4, 5));
+        Assert.AreEqual<int>(2, Calculator<int>.Divide(10, 5));
     }
 
     [DataTestMethod]
@@ -43,7 +41,7 @@ public class CalculatorTests
         bool ok = c.TryCalculate(input, out var result);
 
         Assert.IsTrue(ok, $"Expected success for '{input}'.");
-        Assert.AreEqual(expected, result);
+        Assert.AreEqual<int>(expected, result);
     }
 
     [TestMethod]
@@ -53,7 +51,7 @@ public class CalculatorTests
         bool ok = c.TryCalculate("1 / 0", out var result);
 
         Assert.IsFalse(ok);
-        Assert.AreEqual(0, result);
+        Assert.AreEqual<int>(0, result);
     }
 
     [DataTestMethod]
@@ -66,7 +64,7 @@ public class CalculatorTests
         bool ok = c.TryCalculate(input, out var result);
 
         Assert.IsFalse(ok);
-        Assert.AreEqual(0, result);
+        Assert.AreEqual<int>(0, result);
     }
 
     [DataTestMethod]
@@ -81,7 +79,7 @@ public class CalculatorTests
         bool ok = c.TryCalculate(input, out var result);
 
         Assert.IsFalse(ok);
-        Assert.AreEqual(0, result);
+        Assert.AreEqual<int>(0, result);
     }
 
     [DataTestMethod]
@@ -96,7 +94,7 @@ public class CalculatorTests
         bool ok = c.TryCalculate(input, out var result);
 
         Assert.IsFalse(ok);
-        Assert.AreEqual(0, result);
+        Assert.AreEqual<int>(0, result);
     }
 
     [TestMethod]
@@ -107,6 +105,6 @@ public class CalculatorTests
         bool ok = c.TryCalculate("5 % 2", out var result);
 
         Assert.IsFalse(ok);
-        Assert.AreEqual(0, result);
+        Assert.AreEqual<int>(0, result);
     }
 }

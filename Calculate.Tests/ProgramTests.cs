@@ -1,6 +1,4 @@
-﻿using System.Xml.Serialization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-namespace Calculate.Tests
+﻿namespace Calculate.Tests
 {
     [TestClass]
     public sealed class ProgramTests
