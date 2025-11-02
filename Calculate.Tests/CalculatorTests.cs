@@ -8,7 +8,7 @@ public class CalculatorTests
     [TestMethod]
     public void MathematicalOperations_ExposesFourOperators_BehaveCorrectly()
     {
-        var ops = Calculator.MathematicalOperations;
+        var ops = Calculator<int>.MathematicalOperations;
 
         Assert.AreEqual(4, ops.Count, "Expected exactly four operators.");
         CollectionAssert.AreEquivalent(new List<char> { '+', '-', '*', '/' }, new List<char>(ops.Keys));
@@ -22,10 +22,10 @@ public class CalculatorTests
     [TestMethod]
     public void BasicArithmeticMethods_ValidInputs_ExpectedResults()
     {
-        Assert.AreEqual(9, Calculator.Add(4, 5));
-        Assert.AreEqual(-1, Calculator.Subtract(4, 5));
-        Assert.AreEqual(20, Calculator.Multiply(4, 5));
-        Assert.AreEqual(2, Calculator.Divide(10, 5));
+        Assert.AreEqual(9, Calculator<int>.Add(4, 5));
+        Assert.AreEqual(-1, Calculator<int>.Subtract(4, 5));
+        Assert.AreEqual(20, Calculator<int>.Multiply(4, 5));
+        Assert.AreEqual(2, Calculator<int>.Divide(10, 5));
     }
 
     [DataTestMethod]
@@ -39,7 +39,7 @@ public class CalculatorTests
     [DataRow("-5", -5)]                        // single negative literal
     public void TryCalculate_ValidExpressions_ReturnTrueAndCorrectResult(string input, int expected)
     {
-        Calculator c = new();
+        Calculator<int> c = new();
         bool ok = c.TryCalculate(input, out var result);
 
         Assert.IsTrue(ok, $"Expected success for '{input}'.");
@@ -49,7 +49,7 @@ public class CalculatorTests
     [TestMethod]
     public void TryCalculate_DivideByZero_ReturnsFalse()
     {
-        Calculator c = new();
+        Calculator<int> c = new();
         bool ok = c.TryCalculate("1 / 0", out var result);
 
         Assert.IsFalse(ok);
@@ -62,7 +62,7 @@ public class CalculatorTests
     [DataRow("   ")]
     public void TryCalculate_NullOrWhitespace_ReturnsFalse(string input)
     {
-        Calculator c = new();
+        Calculator<int> c = new();
         bool ok = c.TryCalculate(input, out var result);
 
         Assert.IsFalse(ok);
@@ -76,7 +76,7 @@ public class CalculatorTests
     [DataRow("2 + ( 3 )")]       // parentheses not supported
     public void TryCalculate_InvalidTokens_ReturnsFalse(string input)
     {
-        Calculator c = new();
+        Calculator<int> c = new();
 
         bool ok = c.TryCalculate(input, out var result);
 
@@ -91,7 +91,7 @@ public class CalculatorTests
     [DataRow("2 3")]             // extra operand left over
     public void TryCalculate_MalformedExpressions_ReturnsFalse(string input)
     {
-        Calculator c = new();
+        Calculator<int> c = new();
 
         bool ok = c.TryCalculate(input, out var result);
 
@@ -102,7 +102,7 @@ public class CalculatorTests
     [TestMethod]
     public void TryCalculate_UnknownOperator_ReturnsFalse()
     {
-        Calculator c = new();
+        Calculator<int> c = new();
 
         bool ok = c.TryCalculate("5 % 2", out var result);
 
