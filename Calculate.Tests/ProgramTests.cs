@@ -23,8 +23,8 @@
             actualInput = program.ReadLine();
 
             // Assert
-            Assert.AreEqual(expectedOutput, actualOutput);
-            Assert.AreEqual(expectedInput, actualInput);
+            Assert.AreEqual<string>(expectedOutput, actualOutput);
+            Assert.AreEqual<string>(expectedInput, actualInput);
 
         }
 
@@ -44,7 +44,7 @@
             program.WriteLine(expectedOutput);
 
             // Assert
-            Assert.AreEqual(expectedOutput, actualOutput);
+            Assert.AreEqual<string>(expectedOutput, actualOutput);
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@
             actualInput = program.ReadLine();
 
             // Assert
-            Assert.AreEqual(expectedInput, actualInput);
+            Assert.AreEqual<string>(expectedInput, actualInput);
         }
     }
 
