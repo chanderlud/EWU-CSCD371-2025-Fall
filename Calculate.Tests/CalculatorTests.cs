@@ -18,12 +18,21 @@ public class CalculatorTests
     }
 
     [TestMethod]
-    public void BasicArithmeticMethods_ValidInputs_ExpectedResults()
+    public void BasicArithmeticMethods_ValidIntInputs_ExpectedResults()
     {
         Assert.AreEqual<int>(9, Calculator<int>.Add(4, 5));
         Assert.AreEqual<int>(-1, Calculator<int>.Subtract(4, 5));
         Assert.AreEqual<int>(20, Calculator<int>.Multiply(4, 5));
         Assert.AreEqual<int>(2, Calculator<int>.Divide(10, 5));
+    }
+
+    [TestMethod]
+    public void BasicArithmeticMethods_ValidFloatInputs_ExpectedResults()
+    {
+        Assert.AreEqual<float>(3f, Calculator<float>.Add(1.5f, 1.5f));
+        Assert.AreEqual<float>(-1f, Calculator<float>.Subtract(4f, 5f));
+        Assert.AreEqual<float>(20f, Calculator<float>.Multiply(4f, 5f));
+        Assert.AreEqual<float>(5f, Calculator<float>.Divide(10f, 2f));
     }
 
     [DataTestMethod]

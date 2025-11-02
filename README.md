@@ -27,7 +27,7 @@ Chapter 15: Collection Interfaces with Standard Query Operators
     - If there is no whitespace around the operator, you can assume the `calculation` is invalid and return false. Similarly if the operands are not integers. ✔
     - Use `string.Split()`, pattern matching, logical and operators to parse the string in their entirety ✔
     - Index into the `MathematicalOperations` method using the operator parsed during pattern matching to find the corresponding implementation and invoke it. ✔
-- Implement the Program class to instantiate the calculator and invoke it based on user input from the console. ❌✔
+- Implement the Program class to instantiate the calculator and invoke it based on user input from the console. ✔
 - Be sure to use the `WriteLine`/`ReadLine` properties on `Program` for testing the input and output of your program. ❌✔
 
 ## Extra Credit
@@ -40,7 +40,7 @@ Do one of the following two options (or both if you want extra, extra credit) :)
 
 ## Fundamentals
 
-- Place all shared project properties into a `Directory.Build.props` file.
+- Place all shared project properties into a `Directory.Build.props` file. ✔
 - Place all shared project items into a `Directory.Build.targets` file. (optional)
 - nullable reference types is enabled  ✔
 - Ensure that you turn on code analysis for all projects(EnableNETAnalyzers)  ✔
@@ -48,6 +48,6 @@ Do one of the following two options (or both if you want extra, extra credit) :)
 - and enabled .NET analyzers for both projects ✔
 - For this assignment, always use `Assert.AreEqual<T>()` (the generic version)  ❌✔
 - All of the above should be unit tested ❌✔
-- Choose simplicity over complexity ❌✔
+- Choose simplicity over complexity ✔
 
 ## See [Docs](Docs)
