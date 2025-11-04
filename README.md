@@ -21,7 +21,7 @@ Chapter 15: Collection Interfaces with Standard Query Operators
   - Define a read-only property, `MathematicalOperations`, of type `System.Collections.Generics.IReadOnlyDictionary<TKey,TValue>` that:
     - is initialized to a `System.Collections.Generics.Dictionary<<TKey,TValue>` instance that. ❌✔
       - Uses `char` for the key corresponding to the operators +, -, *, and /. ❌✔
-      - Has values that correspond with the Add, Subtract, Multiple, and Divide methods. ❌✔
+      - Has values that correspond with the Add, Subtract, Multiply, and Divide methods. ❌✔
   - Implement a `TryCalculate` method following "TryParse" pattern ❌✔
     - Valid `calculation` expressions include such strings as "3 + 4", "42 - 2", etc. ❌✔
     - If there is no whitespace around the operator, you can assume the `calculation` is invalid and return false. Similarly if the operands are not integers. ❌✔
