@@ -17,7 +17,7 @@ Chapter 15: Collection Interfaces with Standard Query Operators
   - Write a test that sets these properties at construction time and then invokes the properties and verifies the expected behavior occurs. ❌✔
   - Set the default behavior for the `WriteLine` and `ReadLine` properties to invoke `System.Console` versions of the methods and add an empty default constructor. ❌✔
 - Define a Calculator class ❌✔
-  - Define static `Add`, `Subtract`, `Multiple`, and `Divide` methods that have two parameters and return a third parameter. ❌✔
+  - Define static `Add`, `Subtract`, `Multiply`, and `Divide` methods that have two parameters and return a third parameter. ❌✔
   - Define a read-only property, `MathematicalOperations`, of type `System.Collections.Generics.IReadOnlyDictionary<TKey,TValue>` that:
     - is initialized to a `System.Collections.Generics.Dictionary<<TKey,TValue>` instance that. ❌✔
       - Uses `char` for the key corresponding to the operators +, -, *, and /. ❌✔
