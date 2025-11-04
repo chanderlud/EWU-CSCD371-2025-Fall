@@ -11,7 +11,7 @@ Chapter 15: Collection Interfaces with Standard Query Operators
 
 ## Instructions
 
-- Create a *Console* project called "Calculate.". ❌✔
+- Create a *Console* project called "Calculate". ❌✔
 - Define a Program Class
   - Define two init-only setter properties, `WriteLine` and `ReadLine`, that contain delegates for writing a line of text and reading a line of text respectively ❌✔
   - Write a test that sets these properties at construction time and then invokes the properties and verifies the expected behavior occurs. ❌✔
