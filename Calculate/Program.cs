@@ -18,7 +18,7 @@ public class Program
             string? equation = ReadLine();
             if (equation is not null)
             {
-                if (equation is "exit")
+                if (string.Equals(equation, "exit", StringComparison.OrdinalIgnoreCase))
                 {
                     WriteLine("Goodbye");
                     run = false;
