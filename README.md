@@ -76,16 +76,16 @@ Chapter 14: Events
    - Adding null validation to all the `Person` and `Address` properties is **optional**.
    - Consider using `ISampleData.CsvRows` in your test to verify your results. ✔
 
-5. Implement `ISampleDate.FilterByEmailAddress(Predicate<string> filter)` to return a list of names where the email address matches the `filter`. ❌✔
+5. Implement `ISampleDate.FilterByEmailAddress(Predicate<string> filter)` to return a list of names where the email address matches the `filter`. ✔
 
-   - Use `ISampleData.People` for your data source. ❌✔
+   - Use `ISampleData.People` for your data source. ✔
 
-6. Implement `ISampleData.GetAggregateListOfStatesGivenPeopleCollection(IEnumerable<IPerson> people)` to return a `string` that contains a **unique**, comma-separated list of states. ❌✔
+6. Implement `ISampleData.GetAggregateListOfStatesGivenPeopleCollection(IEnumerable<IPerson> people)` to return a `string` that contains a **unique**, comma-separated list of states. ✔
 
-   - Use the `people` parameter from `ISampleData.People` property for your data source. ❌✔
-   - At a minimum, use the `System.Linq.Enumerable.`Aggregate` LINQ method to create your result. ❌✔
-   - Don't forget the list should be unique. ❌✔
-   - It is recommended that, at a minimum, you use `ISampleData.GetUniqueSortedListOfStatesGivenCsvRows` to validate your result.
+   - Use the `people` parameter from `ISampleData.People` property for your data source. ✔
+   - At a minimum, use the `System.Linq.Enumerable.`Aggregate` LINQ method to create your result. ✔
+   - Don't forget the list should be unique. ✔
+   - It is recommended that, at a minimum, you use `ISampleData.GetUniqueSortedListOfStatesGivenCsvRows` to validate your result. ✔
 
 7. Given the implementation of `Node` in Assignment5
 

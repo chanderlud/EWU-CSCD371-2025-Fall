@@ -40,9 +40,23 @@ public class SampleData : ISampleData
 
     // 5.
     public IEnumerable<(string FirstName, string LastName)> FilterByEmailAddress(
-        Predicate<string> filter) => throw new NotImplementedException();
+        Predicate<string> filter) => People.Where(p => filter(p.EmailAddress)).Select(p => (p.FirstName, p.LastName));
 
     // 6.
     public string GetAggregateListOfStatesGivenPeopleCollection(
-        IEnumerable<IPerson> people) => throw new NotImplementedException();
+        IEnumerable<IPerson> people) => people
+            .Select(people => people.Address.State)
+            .Distinct()
+            .OrderBy(state => state)
+            .Aggregate("", (states, state) =>
+            {
+                if (string.IsNullOrEmpty(states))
+                {
+                    return state;
+                }
+                else
+                {
+                    return states + "," + state;
+                }
+            });
 }
