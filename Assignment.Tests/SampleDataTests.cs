@@ -34,7 +34,7 @@ public class SampleDataTests
     }
 
     [TestMethod]
-    public void GetUniqueSortedListOfStatesGivenCsvRows_ReturnsCorrectStates()
+    public void GetUniqueSortedListOfStatesGivenCsvRows_AddressesWithDuplicateStates_ReturnsStatesWithoutDuplicates()
     {
         // Arrange
         var data = new SampleDataForTest(new List<string>
@@ -53,7 +53,7 @@ public class SampleDataTests
     }
 
     [TestMethod]
-    public void GetUniqueSortedListOfStatesGivenCsvRows_IsSorted_LINQTest()
+    public void GetUniqueSortedListOfStatesGivenCsvRows_UnsortedAddresses_ReturnsSortedStates()
     {
         // Arrange
         var data = new SampleDataForTest(new List<string>
@@ -70,5 +70,21 @@ public class SampleDataTests
         // Assert
         var sorted = result.OrderBy(s => s).ToList();
         CollectionAssert.AreEqual(sorted, result);
+    }
+
+    [TestMethod]
+    public void GetAggregateSortedListOfStatesUsingCsvRows_UnsortedAddressesWithDuplicates_ReturnsSortedAggregateString()
+    {
+        // Arrange
+        var data = new SampleDataForTest(new List<string>
+            {
+                "1,Alice,Smith,alice@email.com,123 Main St,Seattle,WA,98101",
+                "2,Bob,Lee,bob@email.com,456 Elm St,San Francisco,CA,94102",
+                "3,Charlie,Brown,charlie@email.com,789 Oak St,Los Angeles,CA,90001",
+                "4,Dave,Clark,dave@email.com,111 Pine St,Portland,OR,97201"
+            });
+
+        var result = data.GetAggregateSortedListOfStatesUsingCsvRows();
+        Assert.AreEqual<string>("CA,OR,WA", result);
     }
 }
