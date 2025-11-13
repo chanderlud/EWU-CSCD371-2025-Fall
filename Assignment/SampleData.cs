@@ -44,5 +44,19 @@ public class SampleData : ISampleData
 
     // 6.
     public string GetAggregateListOfStatesGivenPeopleCollection(
-        IEnumerable<IPerson> people) => throw new NotImplementedException();
+        IEnumerable<IPerson> people) => people
+            .Select(people => people.Address.State)
+            .Distinct()
+            .OrderBy(state => state)
+            .Aggregate("", (states, state) =>
+            {
+                if (string.IsNullOrEmpty(states))
+                {
+                    return state;
+                }
+                else
+                {
+                    return states + "," + state;
+                }
+            });
 }

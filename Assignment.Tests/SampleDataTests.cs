@@ -102,4 +102,18 @@ public class SampleDataTests
         Assert.HasCount(1, result);
         Assert.IsTrue(result.Contains(("Dave", "Clark")));
     }
+
+    [TestMethod]
+    public void GetAggregateListOfStatesGivenPeopleCollection_PeopleWithDuplicateStates_ReturnsSortedAggregateString()
+    {
+        // Arrange
+        var data = new SampleDataForTest();
+        var people = data.People;
+
+        // Act
+        var result = data.GetAggregateListOfStatesGivenPeopleCollection(people);
+
+        // Assert
+        Assert.AreEqual<string>(data.GetAggregateSortedListOfStatesUsingCsvRows(), result);
+    }
 }
