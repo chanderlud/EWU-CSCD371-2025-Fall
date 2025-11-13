@@ -96,7 +96,7 @@ public class SampleDataTests
         var data = new SampleDataForTest();
 
         // Act
-        var result = data.FilterByEmailAddress(email => email.EndsWith("gmail.com"));
+        var result = data.FilterByEmailAddress(email => email.EndsWith("gmail.com", StringComparison.InvariantCulture));
 
         // Assert
         Assert.HasCount(1, result);
