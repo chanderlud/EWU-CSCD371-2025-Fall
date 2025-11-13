@@ -8,12 +8,15 @@ namespace Assignment;
 public class SampleData : ISampleData
 {
     // 1.
-    public IEnumerable<string> CsvRows => 
+    public virtual IEnumerable<string> CsvRows => 
         File.ReadLines("People.csv").Skip(1);
 
     // 2.
-    public IEnumerable<string> GetUniqueSortedListOfStatesGivenCsvRows() 
-        => throw new NotImplementedException();
+    public IEnumerable<string> GetUniqueSortedListOfStatesGivenCsvRows() =>
+        CsvRows
+            .Select(row => row.Split(',')[6])
+            .Distinct()                       
+            .OrderBy(state => state);          
 
     // 3.
     public string GetAggregateSortedListOfStatesUsingCsvRows()
