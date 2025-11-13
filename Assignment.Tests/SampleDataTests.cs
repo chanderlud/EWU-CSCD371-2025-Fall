@@ -9,7 +9,7 @@ namespace Assignment.Tests;
 public class SampleDataTests
 {
     // A derived class to override CsvRows for testing purposes
-    private class SampleDataForTest : SampleData
+    private sealed class SampleDataForTest : SampleData
     {
         private readonly IEnumerable<string> _rows;
 
