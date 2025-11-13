@@ -1,7 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
     <ProjectReference Include="..\Assignment.Interfaces\Assignment.Interfaces.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+	  <None Update="People.csv">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 
 </Project>
