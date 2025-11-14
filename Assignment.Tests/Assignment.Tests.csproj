@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assignment.Interfaces\Assignment.Interfaces.csproj" />
     <ProjectReference Include="..\Assignment\Assignment.csproj" />
   </ItemGroup>
 

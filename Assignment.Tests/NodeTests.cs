@@ -1,7 +1,9 @@
-﻿
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Assignment.Tests;
 
-internal class NodeTests
+[TestClass]
+public class NodeTests
 {
+
 }

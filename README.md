@@ -50,9 +50,9 @@ Chapter 14: Events
 
 1. Implement the `ISampleData.CsvRows` property, loading the data from the `People.csv` file and returning each line as a single string. ✔
 
-   - Change the "Copy to" property on People.csv to "Copy if newer" so that the file is deployed along with your test project. ❌✔
+   - Change the "Copy to" property on People.csv to "Copy if newer" so that the file is deployed along with your test project. ✔
    - Using LINQ, skip the first row in the `People.csv`. ✔
-   - Be sure to appropriately handle resource (`IDisposable`) items correctly if applicable (and it may not be depending on how you implement it). ❌✔
+   - Be sure to appropriately handle resource (`IDisposable`) items correctly if applicable (and it may not be depending on how you implement it). ✔
 
 2. Implement `IEnumerable<string> GetUniqueSortedListOfStatesGivenCsvRows()` to return a **sorted**, **unique** list of states. ✔
 
@@ -89,8 +89,8 @@ Chapter 14: Events
 
 7. Given the implementation of `Node` in Assignment5
 
-- Implement `IEnumerable<T>` to return all the items in the "circle" of items. ❌✔
-- Add an `IEnumberable<T> ChildItems(int maximum)` method to `Node` that returns the remaining items with a maximum number of items returned less than `maximum`.  
+- Implement `IEnumerable<T>` to return all the items in the "circle" of items. ✔
+- Add an `IEnumberable<T> ChildItems(int maximum)` method to `Node` that returns the remaining items with a maximum number of items returned less than `maximum`.  ✔
 
 ## Extra Credit
 
@@ -99,13 +99,13 @@ Chapter 14: Events
 ## Fundamentals
 
 - Place all shared project properties into a `Directory.Build.Props` file. ✔
-- Place all shared project items into a `Directory.Build.targets` file.
+- Place all shared project items into a `Directory.Build.targets` file. ✔
 - Ensure nullable reference types is enabled  ✔
 - Ensure that you turn on code analysis for all projects(EnableNETAnalyzers)  ✔
 - Set `LangVersion` and the `TargetFramework` to the latest released versions available (preview versions optional)   ✔
 - and enabled .NET analyzers for both projects ✔
-- For this assignment, consider using `Assert.AreEqual<T>()` (the generic version)  ❌✔
-- All of the above should be unit tested ❌✔
-- Choose simplicity over complexity ❌✔
+- For this assignment, consider using `Assert.AreEqual<T>()` (the generic version)  ✔
+- All of the above should be unit tested ✔
+- Choose simplicity over complexity ✔
 
 ## See [Docs](Docs)
