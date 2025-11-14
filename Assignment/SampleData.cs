@@ -36,7 +36,7 @@ public class SampleData : ISampleData
             lastName: columns[2],
             address: address,
             emailAddress: columns[3]);
-    }).OrderBy(person => person.Address.State).OrderBy(person => person.Address.City).OrderBy(person => person.Address.Zip);
+    }).OrderBy(person => person.Address.State).ThenBy(person => person.Address.City).ThenBy(person => person.Address.Zip);
 
     // 5.
     public IEnumerable<(string FirstName, string LastName)> FilterByEmailAddress(
