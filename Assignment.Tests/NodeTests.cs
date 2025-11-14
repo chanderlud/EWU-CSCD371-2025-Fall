@@ -8,7 +8,7 @@ namespace Assignment.Tests;
 [TestClass]
 public class NodeTests
 {
-    private Node<int> CreateSampleList()
+    private static Node<int> CreateSampleList()
     {
         // Due to Append implementation, order from head is:
         // head = 1
