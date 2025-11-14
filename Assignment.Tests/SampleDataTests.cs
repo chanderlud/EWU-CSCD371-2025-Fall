@@ -83,7 +83,7 @@ public class SampleDataTests
         var data = new SampleData();
         var people = data.People.ToList();
 
-        var sorted = people.OrderBy(person => person.Address.State).OrderBy(person => person.Address.City).OrderBy(person => person.Address.Zip).ToList();
+        var sorted = people.OrderBy(person => person.Address.State).ThenBy(person => person.Address.City).ThenBy(person => person.Address.Zip).ToList();
 
         Assert.HasCount(data.CsvRows.Count(), people);
         Assert.IsTrue(people.SequenceEqual(sorted));

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GenericsHomework;
+namespace Assignment;
 
 public class Node<TNodeValue> : IEnumerable<TNodeValue>
 {
@@ -73,14 +73,14 @@ public class Node<TNodeValue> : IEnumerable<TNodeValue>
         return GetEnumerator();
     }
 
-    IEnumerable<TNodeValue> ChildItems(int maximum)
+    public IEnumerable<TNodeValue> ChildItems(int maximum)
     {
         if (maximum < 0)
             throw new ArgumentOutOfRangeException(nameof(maximum));
 
         int count = 0;
 
-        foreach (var value in this)
+        foreach (TNodeValue value in this)
         {
             if (count++ >= maximum)
                 yield break;
