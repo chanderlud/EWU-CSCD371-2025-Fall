@@ -75,8 +75,7 @@ public class Node<TNodeValue> : IEnumerable<TNodeValue>
 
     public IEnumerable<TNodeValue> ChildItems(int maximum)
     {
-        if (maximum < 0)
-            throw new ArgumentOutOfRangeException(nameof(maximum));
+        ArgumentOutOfRangeException.ThrowIfNegative(maximum, nameof(maximum));
 
         int count = 0;
 
