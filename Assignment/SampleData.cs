@@ -48,15 +48,5 @@ public class SampleData : ISampleData
             .Select(people => people.Address.State)
             .Distinct()
             .OrderBy(state => state)
-            .Aggregate("", (states, state) =>
-            {
-                if (string.IsNullOrEmpty(states))
-                {
-                    return state;
-                }
-                else
-                {
-                    return states + "," + state;
-                }
-            });
+            .Aggregate((states, state) => states + "," + state);
 }
