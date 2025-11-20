@@ -79,12 +79,14 @@ public class Node<TNodeValue> : IEnumerable<TNodeValue>
 
         int count = 0;
 
-        foreach (TNodeValue value in this)
+        Node<TNodeValue> current = Next;
+        do
         {
             if (count++ >= maximum)
                 yield break;
 
-            yield return value;
-        }
+            yield return current.Value;
+            current = current.Next;
+        } while (current != this);
     }
 }

@@ -56,7 +56,7 @@ public class NodeTests
         var values = head.ChildItems(10).ToList();
 
         // Assert
-        CollectionAssert.AreEqual(new List<int> { 1, 3, 2 }, values);
+        CollectionAssert.AreEqual(new List<int> { 3, 2 }, values);
     }
 
     [TestMethod]
@@ -66,10 +66,10 @@ public class NodeTests
         var head = CreateSampleList();
 
         // Act
-        var values = head.ChildItems(2).ToList();
+        var values = head.ChildItems(1).ToList();
 
         // Assert
-        CollectionAssert.AreEqual(new List<int> { 1, 3 }, values);
+        CollectionAssert.AreEqual(new List<int> { 3 }, values);
     }
 
     [TestMethod]
