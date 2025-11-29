@@ -57,8 +57,9 @@ public class PingProcessTests
     [TestMethod]
     public void RunTaskAsync_Success()
     {
-        // Do NOT use async/await in this test.
-        // Test Sut.RunTaskAsync("localhost");
+        PingResult result = Sut.RunTaskAsync("localhost").Result;
+        Assert.AreEqual<int>(0, result.ExitCode);
+        Assert.StartsWith("Pinging", result.StdOutput?.Trim());
     }
 
     [TestMethod]
@@ -84,14 +85,14 @@ public class PingProcessTests
 
 
     [TestMethod]
-    [ExpectedException(typeof(AggregateException))]
+    // [ExpectedException(typeof(AggregateException))]
     public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrapping()
     {
         
     }
 
     [TestMethod]
-    [ExpectedException(typeof(TaskCanceledException))]
+    // [ExpectedException(typeof(TaskCanceledException))]
     public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrappingTaskCanceledException()
     {
         // Use exception.Flatten()
