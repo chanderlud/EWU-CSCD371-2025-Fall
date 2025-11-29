@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Assignment.Tests;
@@ -64,37 +65,41 @@ public class PingProcessTests
     [TestMethod]
     public void RunAsync_UsingTaskReturn_Success()
     {
-        // Do NOT use async/await in this test.
-        PingResult result = default;
-        // Test Sut.RunAsync("localhost");
+        PingResult result = Sut.RunAsync("localhost").Result;
         AssertValidPingOutput(result);
     }
 
     [TestMethod]
-#pragma warning disable CS1998 // Remove this
     async public Task RunAsync_UsingTpl_Success()
     {
-        // DO use async/await in this test.
-        PingResult result = default;
-
-        // Test Sut.RunAsync("localhost");
+        PingResult result = await Sut.RunAsync("localhost");
         AssertValidPingOutput(result);
     }
-#pragma warning restore CS1998 // Remove this
 
 
     [TestMethod]
-    // [ExpectedException(typeof(AggregateException))]
-    public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrapping()
+    public async Task RunAsync_UsingTplWithCancellation_ThrowsOperationCanceled()
     {
-        
+        using var cts = new CancellationTokenSource();
+        Task<PingResult> task = Sut.RunAsync("localhost", cts.Token);
+        cts.Cancel();
+
+        await Assert.ThrowsExactlyAsync<TaskCanceledException>(
+            async () => await task);
     }
 
     [TestMethod]
-    // [ExpectedException(typeof(TaskCanceledException))]
     public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrappingTaskCanceledException()
     {
-        // Use exception.Flatten()
+        using var cts = new CancellationTokenSource();
+        Task<PingResult> task = Sut.RunAsync("localhost", cts.Token);
+        cts.Cancel();
+
+        var aggregate = Assert.ThrowsExactly<AggregateException>(task.Wait);
+
+        var flattened = aggregate.Flatten();
+        Assert.HasCount(1, flattened.InnerExceptions);
+        Assert.IsInstanceOfType(flattened.InnerExceptions[0], typeof(TaskCanceledException));
     }
 
     [TestMethod]
