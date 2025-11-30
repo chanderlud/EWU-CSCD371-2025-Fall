@@ -41,17 +41,39 @@ public class PingProcess
 
     async public Task<PingResult> RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
     {
-        StringBuilder? stringBuilder = null;
-        ParallelQuery<Task<int>>? all = hostNameOrAddresses.AsParallel().Select(async item =>
+        if (hostNameOrAddresses is null)
         {
-            Task<PingResult> task = RunTaskAsync(item);
-            await task.WaitAsync(cancellationToken);
-            return task.Result.ExitCode;
+            throw new ArgumentNullException(nameof(hostNameOrAddresses));
+        }
+
+        StringBuilder? stringBuilder = null;
+        Object syncRoot = new();
+
+        ParallelQuery<Task<int>>? allQuery = hostNameOrAddresses.AsParallel().Select(async host =>
+        {
+            Task<PingResult> task = RunTaskAsync(host);
+            PingResult result = await task.WaitAsync(cancellationToken);
+
+            if (!string.IsNullOrEmpty(result.StdOutput))
+            {
+                lock (syncRoot)
+                {
+                    (stringBuilder ??= new StringBuilder())
+                        .Append(result.StdOutput);
+                }
+            }
+
+            return result.ExitCode;
         });
 
-        await Task.WhenAll(all);
-        int total = all.Aggregate(0, (total, item) => total + item.Result);
-        return new PingResult(total, stringBuilder?.ToString());
+        Task<int>[] allArray = allQuery.ToArray();
+
+        await Task.WhenAll(allArray);
+        int total = allArray.Aggregate(0, (total, item) => total + item.Result);
+        string? combinedOutput = stringBuilder is null || stringBuilder.Length == 0
+            ? null
+            : stringBuilder.ToString();
+        return new PingResult(total, combinedOutput);
     }
 
     async public Task<PingResult> RunLongRunningAsync(
