@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -117,7 +118,7 @@ public class PingProcessTests
     async public Task RunAsync_MultipleHostAddresses_True()
     {
         string[] hostNames = ["localhost", "localhost", "localhost", "localhost"];
-        int expectedLinesPerPing = PingOutputLikeExpression.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Length;
+        int expectedLinesPerPing = _pingOutputLikeExpression.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Length;
         int expectedLineCount = expectedLinesPerPing * hostNames.Length;
 
         PingResult result = await Sut.RunAsync(hostNames);
@@ -129,14 +130,41 @@ public class PingProcessTests
     }
 
     [TestMethod]
-#pragma warning disable CS1998 // Remove this
     async public Task RunLongRunningAsync_UsingTpl_Success()
     {
-        PingResult result = default;
-        // Test Sut.RunLongRunningAsync("localhost");
-        AssertValidPingOutput(result);
+        // 1. Arrange
+        ProcessStartInfo startInfo = new ProcessStartInfo("ping", "localhost");
+
+        StringBuilder outputBuilder = new StringBuilder();
+        StringBuilder errorBuilder = new StringBuilder();
+
+        void ProgressOutput(string? line)
+        {
+            if (line is not null)
+            {
+                outputBuilder.AppendLine(line);
+            }
+        }
+
+        void ProgressError(string? line)
+        {
+            if (line is not null)
+            {
+                errorBuilder.AppendLine(line);
+            }
+        }
+
+        using CancellationTokenSource cts = new CancellationTokenSource();
+
+        // 2. Act
+        int exitCode = await Sut.RunLongRunningAsync(startInfo, ProgressOutput, ProgressError, cts.Token);
+
+        // 3. Assert
+        string stdOutput = outputBuilder.ToString();
+        AssertValidPingOutput(exitCode, stdOutput); 
+        Assert.AreEqual(string.Empty, errorBuilder.ToString().Trim(), "Expected no stderr output");
+
     }
-#pragma warning restore CS1998 // Remove this
 
     [TestMethod]
     public void StringBuilderAppendLine_InParallel_IsNotThreadSafe()
@@ -148,7 +176,7 @@ public class PingProcessTests
         Assert.AreNotEqual(lineCount, numbers.Count()+1);
     }
 
-    readonly string PingOutputLikeExpression = @"
+    readonly string _pingOutputLikeExpression = @"
 Pinging * with 32 bytes of data:
 Reply from ::1: time<*
 Reply from ::1: time<*
@@ -163,7 +191,7 @@ Approximate round trip times in milli-seconds:
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
-        Assert.IsTrue(stdOutput?.IsLike(PingOutputLikeExpression)??false,
+        Assert.IsTrue(stdOutput?.IsLike(_pingOutputLikeExpression)??false,
             $"Output is unexpected: {stdOutput}");
         Assert.AreEqual<int>(0, exitCode);
     }

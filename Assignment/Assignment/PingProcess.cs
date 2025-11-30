@@ -84,6 +84,20 @@ public class PingProcess
         throw new NotImplementedException();
     }
 
+    public Task<int> RunLongRunningAsync(ProcessStartInfo startInfo, Action<string?>? progressOutput,
+        Action<string?>? progressError, CancellationToken token)
+    {
+        return Task.Factory.StartNew(
+            () =>
+            {
+                Process process = RunProcessInternal(startInfo, progressOutput, progressError, token);
+                return process.ExitCode;
+            },
+            token,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Current);
+    }
+
     private Process RunProcessInternal(
         ProcessStartInfo startInfo,
         Action<string?>? progressOutput,
