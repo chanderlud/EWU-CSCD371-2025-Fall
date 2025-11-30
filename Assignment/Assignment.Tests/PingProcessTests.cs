@@ -89,6 +89,17 @@ public class PingProcessTests
     }
 
     [TestMethod]
+    public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrapping()
+    {
+        using var cts = new CancellationTokenSource();
+        Task<PingResult> task = Sut.RunAsync("localhost", cts.Token);
+        cts.Cancel();
+
+        var aggregate = Assert.ThrowsExactly<AggregateException>(task.Wait);
+        Assert.IsNotNull(aggregate);
+    }
+
+    [TestMethod]
     public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrappingTaskCanceledException()
     {
         using var cts = new CancellationTokenSource();
