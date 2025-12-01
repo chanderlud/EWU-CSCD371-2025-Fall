@@ -199,8 +199,8 @@ public class PingProcess
             }
             process.WaitForExit();
 
-            outputDone?.Wait();
-            errorDone?.Wait();
+            outputDone?.Wait(token);
+            errorDone?.Wait(token);
         }
         catch (Exception e)
         {
