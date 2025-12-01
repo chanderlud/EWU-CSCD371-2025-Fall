@@ -13,27 +13,28 @@ public record struct PingResult(int ExitCode, string? StdOutput);
 
 public class PingProcess
 {
-    private ProcessStartInfo StartInfo { get; } = new("ping");
-
-    public PingResult Run(string hostNameOrAddress)
+    public PingResult Run(string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        StartInfo.Arguments = hostNameOrAddress;
+        ProcessStartInfo info = new("ping")
+        {
+            Arguments = hostNameOrAddress
+        };
+
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
-        Process process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
+        Process process = RunProcessInternal(info, updateStdOutput, default, cancellationToken);
         return new PingResult(process.ExitCode, stringBuilder?.ToString());
     }
 
-    public Task<PingResult> RunTaskAsync(string hostNameOrAddress)
+    public Task<PingResult> RunTaskAsync(string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        return Task.Run(() => Run(hostNameOrAddress));
+        return Task.Run(() => Run(hostNameOrAddress, cancellationToken));
     }
 
-    async public Task<PingResult> RunAsync(
-        string hostNameOrAddress, CancellationToken cancellationToken = default)
+    async public Task<PingResult> RunAsync(string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        Task<PingResult> task = RunTaskAsync(hostNameOrAddress);
+        Task<PingResult> task = RunTaskAsync(hostNameOrAddress, cancellationToken);
         PingResult result = await task.WaitAsync(cancellationToken);
         cancellationToken.ThrowIfCancellationRequested();
         return result;
@@ -92,9 +93,9 @@ public class PingProcess
         StringBuilder? stringBuilder = null;
         object syncRoot = new();
 
-        ParallelQuery<Task<int>>? allQuery = hostNameOrAddresses.AsParallel().Select(async host =>
+        Task<int>[] tasks = hostNameOrAddresses.AsParallel().Select(async host =>
         {
-            Task<PingResult> task = RunTaskAsync(host);
+            Task<PingResult> task = RunTaskAsync(host, cancellationToken);
             PingResult result = await task.WaitAsync(cancellationToken);
 
             if (!string.IsNullOrEmpty(result.StdOutput))
@@ -107,12 +108,10 @@ public class PingProcess
             }
 
             return result.ExitCode;
-        });
+        }).ToArray();
 
-        Task<int>[] allArray = allQuery.ToArray();
-
-        await Task.WhenAll(allArray);
-        int total = allArray.Aggregate(0, (total, item) => total + item.Result);
+        await Task.WhenAll(tasks);
+        int total = tasks.Aggregate(0, (total, item) => total + item.Result);
         string? combinedOutput = stringBuilder is null || stringBuilder.Length == 0
             ? null
             : stringBuilder.ToString();

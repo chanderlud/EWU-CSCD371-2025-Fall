@@ -80,7 +80,7 @@ public class PingProcessTests
 
 
     [TestMethod]
-    public async Task RunAsync_UsingTplWithCancellation_ThrowsOperationCanceled()
+    public async Task RunAsync_UsingTplWithCancellation_ThrowsTaskCanceled()
     {
         using var cts = new CancellationTokenSource();
         Task<PingResult> task = Sut.RunAsync("localhost", cts.Token);
@@ -195,21 +195,11 @@ public class PingProcessTests
         });
 
         PingResult result = await Sut.RunAsync("localhost", progress);
-        await completion.Task;
-
-        List<string> progressLines = lines.ToList();
-
         AssertValidPingOutput(result);
-        Assert.IsNotEmpty(progressLines, "Expected progress to receive output lines.");
 
-        string fromProgress = string.Join(Environment.NewLine, progressLines).Trim();
-        string fromResult = result.StdOutput?.Trim() ?? string.Empty;
-
-        fromProgress = WildcardPattern.NormalizeLineEndings(fromProgress);
-        fromResult = WildcardPattern.NormalizeLineEndings(fromResult);
-
-        Assert.IsTrue(fromProgress.IsLike(_PingOutputLikeExpression), $"Progress output is unexpected: {fromProgress}");
-        Assert.IsTrue(fromResult.IsLike(_PingOutputLikeExpression), $"Result output is unexpected: {fromResult}");
+        await completion.Task;
+        int expectedLinesPerPing = _PingOutputLikeExpression.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Length;
+        Assert.HasCount(expectedLinesPerPing, lines.Where((line) => line.Length != 0), "Expected progress to receive all output lines.");
     }
 
     readonly string _PingOutputLikeExpression = @"
