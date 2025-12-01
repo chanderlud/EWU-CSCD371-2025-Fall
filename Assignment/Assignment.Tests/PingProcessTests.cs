@@ -1,5 +1,6 @@
 ﻿using IntelliTect.TestTools;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -178,21 +179,25 @@ public class PingProcessTests
     }
 
     [TestMethod]
-
-
-
     public async Task RunAsync_WithProgress_CapturesIncrementalOutput()
     {
-        List<string> progressLines = [];
+        TaskCompletionSource completion = new();
+        ConcurrentQueue<string> lines = new();
         IProgress<string?> progress = new Progress<string?>(line =>
         {
             if (line is not null)
             {
-                progressLines.Add(line);
+                lines.Enqueue(line);
+            } else
+            {
+                completion.TrySetResult();
             }
         });
 
         PingResult result = await Sut.RunAsync("localhost", progress);
+        await completion.Task;
+
+        List<string> progressLines = lines.ToList();
 
         AssertValidPingOutput(result);
         Assert.IsNotEmpty(progressLines, "Expected progress to receive output lines.");
@@ -218,6 +223,7 @@ Ping statistics for ::1:
     Packets: Sent = *, Received = *, Lost = 0 (0% loss),
 Approximate round trip times in milli-seconds:
     Minimum = *, Maximum = *, Average = *".Trim();
+
     private void AssertValidPingOutput(int exitCode, string? stdOutput)
     {
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
@@ -226,6 +232,7 @@ Approximate round trip times in milli-seconds:
             $"Output is unexpected: {stdOutput}");
         Assert.AreEqual<int>(0, exitCode);
     }
+
     private void AssertValidPingOutput(PingResult result) =>
         AssertValidPingOutput(result.ExitCode, result.StdOutput);
 }

@@ -47,24 +47,24 @@ public class PingProcess
 
         void ProgressOutput(string? line)
         {
+            progress.Report(line);
             if (line is null)
             {
                 return;
             }
 
-            progress.Report(line);
             (stringBuilder ??= new StringBuilder())
                 .AppendLine(line);
         }
 
         void ProgressError(string? line)
         {
+            progress.Report(line);
             if (line is null)
             {
                 return;
             }
 
-            progress.Report(line);
             (stringBuilder ??= new StringBuilder())
                 .AppendLine(line);
         }
@@ -117,14 +117,6 @@ public class PingProcess
             ? null
             : stringBuilder.ToString();
         return new PingResult(total, combinedOutput);
-    }
-
-    async public Task<PingResult> RunLongRunningAsync(
-        string hostNameOrAddress, CancellationToken cancellationToken = default)
-    {
-        Task task = null!;
-        await task;
-        throw new NotImplementedException();
     }
 
     public Task<int> RunLongRunningAsync(ProcessStartInfo startInfo, Action<string?>? progressOutput,
@@ -238,26 +230,20 @@ public class PingProcess
 
         void OutputHandler(object s, DataReceivedEventArgs e)
         {
+            progressOutput?.Invoke(e.Data);
             if (e.Data is null)
             {
                 outputDone?.Set();
-            }
-            else
-            {
-                progressOutput?.Invoke(e.Data);
             }
         }
 
         void ErrorHandler(object s, DataReceivedEventArgs e)
         {
+            progressError?.Invoke(e.Data);
             if (e.Data is null)
             {
                 errorDone?.Set();
-            }
-            else
-            {
-                progressError?.Invoke(e.Data);
-            }
+            } 
         }
     }
 
