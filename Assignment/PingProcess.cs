@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,22 +15,16 @@ public class PingProcess
 {
     public PingResult Run(string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        ProcessStartInfo info = new("ping");
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        ProcessStartInfo info = new("ping")
         {
-            info.Arguments = hostNameOrAddress;
-        }
-        else
-        {
-            info.Arguments = $"-c 4 {hostNameOrAddress}";
-        }
+            Arguments = hostNameOrAddress
+        };
 
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
-        Process process = RunProcessInternal(info, updateStdOutput, default, cancellationToken);
-        return new PingResult(process.ExitCode, stringBuilder?.ToString());
+        int exitCode = RunProcessInternal(info, updateStdOutput, default, cancellationToken);
+        return new PingResult(exitCode, stringBuilder?.ToString());
     }
 
     public Task<PingResult> RunTaskAsync(string hostNameOrAddress, CancellationToken cancellationToken = default)
@@ -92,7 +85,6 @@ public class PingProcess
         return new PingResult(exitCode, combinedOutput);
     }
 
-
     async public Task<PingResult> RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(hostNameOrAddresses);
@@ -131,28 +123,28 @@ public class PingProcess
         return Task.Factory.StartNew(
             () =>
             {
-                Process process = RunProcessInternal(startInfo, progressOutput, progressError, token);
-                return process.ExitCode;
+                return RunProcessInternal(startInfo, progressOutput, progressError, token);
             },
             token,
             TaskCreationOptions.LongRunning,
             TaskScheduler.Current);
     }
 
-    private Process RunProcessInternal(
+    protected virtual int RunProcessInternal(
         ProcessStartInfo startInfo,
         Action<string?>? progressOutput,
         Action<string?>? progressError,
         CancellationToken token)
     {
-        var process = new Process
+        using var process = new Process
         {
             StartInfo = UpdateProcessStartInfo(startInfo)
         };
+
         return RunProcessInternal(process, progressOutput, progressError, token);
     }
 
-    private Process RunProcessInternal(
+    private int RunProcessInternal(
         Process process,
         Action<string?>? progressOutput,
         Action<string?>? progressError,
@@ -163,7 +155,6 @@ public class PingProcess
         ManualResetEventSlim? errorDone =
             process.StartInfo.RedirectStandardError ? new(initialState: false) : null;
 
-
         process.EnableRaisingEvents = true;
         process.OutputDataReceived += OutputHandler;
         process.ErrorDataReceived += ErrorHandler;
@@ -172,7 +163,7 @@ public class PingProcess
         {
             if (!process.Start())
             {
-                return process;
+                return process.ExitCode;
             }
 
             token.Register(obj =>
@@ -190,7 +181,6 @@ public class PingProcess
                 }
             }, process);
 
-
             if (process.StartInfo.RedirectStandardOutput)
             {
                 process.BeginOutputReadLine();
@@ -200,11 +190,10 @@ public class PingProcess
                 process.BeginErrorReadLine();
             }
 
-            if (process.HasExited)
+            if (!process.HasExited)
             {
-                return process;
+                process.WaitForExit();
             }
-            process.WaitForExit();
 
             outputDone?.Wait(token);
             errorDone?.Wait(token);
@@ -223,6 +212,7 @@ public class PingProcess
             {
                 process.CancelOutputRead();
             }
+
             process.OutputDataReceived -= OutputHandler;
             process.ErrorDataReceived -= ErrorHandler;
 
@@ -230,9 +220,9 @@ public class PingProcess
             {
                 process.Kill();
             }
-
         }
-        return process;
+
+        return process.ExitCode;
 
         void OutputHandler(object s, DataReceivedEventArgs e)
         {
@@ -249,7 +239,7 @@ public class PingProcess
             if (e.Data is null)
             {
                 errorDone?.Set();
-            } 
+            }
         }
     }
 
@@ -260,7 +250,6 @@ public class PingProcess
         startInfo.RedirectStandardOutput = true;
         startInfo.UseShellExecute = false;
         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-
         return startInfo;
     }
 }

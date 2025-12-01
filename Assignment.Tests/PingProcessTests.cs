@@ -13,7 +13,7 @@ namespace Assignment.Tests;
 [TestClass]
 public class PingProcessTests
 {
-    PingProcess Sut { get; set; } = new();
+    FakePingProcess Sut { get; set; } = new();
 
     [TestInitialize]
     public void TestInitialize()
