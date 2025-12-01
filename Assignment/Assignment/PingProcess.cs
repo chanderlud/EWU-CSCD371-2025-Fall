@@ -90,7 +90,7 @@ public class PingProcess
         ArgumentNullException.ThrowIfNull(hostNameOrAddresses);
 
         StringBuilder? stringBuilder = null;
-        Object syncRoot = new();
+        object syncRoot = new();
 
         ParallelQuery<Task<int>>? allQuery = hostNameOrAddresses.AsParallel().Select(async host =>
         {
@@ -160,6 +160,12 @@ public class PingProcess
         Action<string?>? progressError,
         CancellationToken token)
     {
+        ManualResetEventSlim? outputDone =
+            process.StartInfo.RedirectStandardOutput ? new(initialState: false) : null;
+        ManualResetEventSlim? errorDone =
+            process.StartInfo.RedirectStandardError ? new(initialState: false) : null;
+
+
         process.EnableRaisingEvents = true;
         process.OutputDataReceived += OutputHandler;
         process.ErrorDataReceived += ErrorHandler;
@@ -201,6 +207,9 @@ public class PingProcess
                 return process;
             }
             process.WaitForExit();
+
+            outputDone?.Wait();
+            errorDone?.Wait();
         }
         catch (Exception e)
         {
@@ -229,12 +238,26 @@ public class PingProcess
 
         void OutputHandler(object s, DataReceivedEventArgs e)
         {
-            progressOutput?.Invoke(e.Data);
+            if (e.Data is null)
+            {
+                outputDone?.Set();
+            }
+            else
+            {
+                progressOutput?.Invoke(e.Data);
+            }
         }
 
         void ErrorHandler(object s, DataReceivedEventArgs e)
         {
-            progressError?.Invoke(e.Data);
+            if (e.Data is null)
+            {
+                errorDone?.Set();
+            }
+            else
+            {
+                progressError?.Invoke(e.Data);
+            }
         }
     }
 
