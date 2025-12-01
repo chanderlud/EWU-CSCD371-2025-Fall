@@ -20,9 +20,9 @@ public class PingProcess
         StartInfo.Arguments = hostNameOrAddress;
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
-            (stringBuilder??=new StringBuilder()).AppendLine(line);
+            (stringBuilder ??= new StringBuilder()).AppendLine(line);
         Process process = RunProcessInternal(StartInfo, updateStdOutput, default, default);
-        return new PingResult( process.ExitCode, stringBuilder?.ToString());
+        return new PingResult(process.ExitCode, stringBuilder?.ToString());
     }
 
     public Task<PingResult> RunTaskAsync(string hostNameOrAddress)
@@ -39,12 +39,55 @@ public class PingProcess
         return result;
     }
 
+    public async Task<PingResult> RunAsync(string hostNameOrAddress, IProgress<string?> progress, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(progress);
+
+        StringBuilder? stringBuilder = null;
+
+        void ProgressOutput(string? line)
+        {
+            if (line is null)
+            {
+                return;
+            }
+
+            progress.Report(line);
+            (stringBuilder ??= new StringBuilder())
+                .AppendLine(line);
+        }
+
+        void ProgressError(string? line)
+        {
+            if (line is null)
+            {
+                return;
+            }
+
+            progress.Report(line);
+            (stringBuilder ??= new StringBuilder())
+                .AppendLine(line);
+        }
+
+        ProcessStartInfo startInfo = new("ping", hostNameOrAddress);
+
+        Task<int> longRunningTask =
+            RunLongRunningAsync(startInfo, ProgressOutput, ProgressError, cancellationToken);
+
+        int exitCode = await longRunningTask.WaitAsync(cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        string? combinedOutput = stringBuilder is null || stringBuilder.Length == 0
+            ? null
+            : stringBuilder.ToString();
+
+        return new PingResult(exitCode, combinedOutput);
+    }
+
+
     async public Task<PingResult> RunAsync(IEnumerable<string> hostNameOrAddresses, CancellationToken cancellationToken = default)
     {
-        if (hostNameOrAddresses is null)
-        {
-            throw new ArgumentNullException(nameof(hostNameOrAddresses));
-        }
+        ArgumentNullException.ThrowIfNull(hostNameOrAddresses);
 
         StringBuilder? stringBuilder = null;
         Object syncRoot = new();

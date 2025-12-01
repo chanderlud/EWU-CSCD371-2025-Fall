@@ -111,7 +111,7 @@ public class PingProcessTests
 
         var flattened = aggregate.Flatten();
         Assert.HasCount(1, flattened.InnerExceptions);
-        Assert.IsInstanceOfType(flattened.InnerExceptions[0], typeof(TaskCanceledException));
+        Assert.IsInstanceOfType<TaskCanceledException>(flattened.InnerExceptions[0]);
     }
 
     [TestMethod]
@@ -133,10 +133,10 @@ public class PingProcessTests
     async public Task RunLongRunningAsync_UsingTpl_Success()
     {
         // 1. Arrange
-        ProcessStartInfo startInfo = new ProcessStartInfo("ping", "localhost");
+        ProcessStartInfo startInfo = new("ping", "localhost");
 
-        StringBuilder outputBuilder = new StringBuilder();
-        StringBuilder errorBuilder = new StringBuilder();
+        StringBuilder outputBuilder = new();
+        StringBuilder errorBuilder = new();
 
         void ProgressOutput(string? line)
         {
@@ -154,7 +154,7 @@ public class PingProcessTests
             }
         }
 
-        using CancellationTokenSource cts = new CancellationTokenSource();
+        using CancellationTokenSource cts = new();
 
         // 2. Act
         int exitCode = await Sut.RunLongRunningAsync(startInfo, ProgressOutput, ProgressError, cts.Token);
@@ -174,6 +174,33 @@ public class PingProcessTests
         numbers.AsParallel().ForAll(item => stringBuilder.AppendLine(""));
         int lineCount = stringBuilder.ToString().Split(Environment.NewLine).Length;
         Assert.AreNotEqual(lineCount, numbers.Count()+1);
+    }
+
+    [TestMethod]
+    public async Task RunAsync_WithProgress_CapturesIncrementalOutput()
+    {
+        List<string> progressLines = [];
+        IProgress<string?> progress = new Progress<string?>(line =>
+        {
+            if (line is not null)
+            {
+                progressLines.Add(line);
+            }
+        });
+
+        PingResult result = await Sut.RunAsync("localhost", progress);
+
+        AssertValidPingOutput(result);
+        Assert.IsNotEmpty(progressLines, "Expected progress to receive output lines.");
+
+        string fromProgress = string.Join(Environment.NewLine, progressLines).Trim();
+        string fromResult = result.StdOutput?.Trim() ?? string.Empty;
+
+        fromProgress = WildcardPattern.NormalizeLineEndings(fromProgress);
+        fromResult = WildcardPattern.NormalizeLineEndings(fromResult);
+
+        Assert.IsTrue(fromProgress.IsLike(_pingOutputLikeExpression), $"Progress output is unexpected: {fromProgress}");
+        Assert.IsTrue(fromResult.IsLike(_pingOutputLikeExpression), $"Result output is unexpected: {fromResult}");
     }
 
     readonly string _pingOutputLikeExpression = @"
