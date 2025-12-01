@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,10 +16,16 @@ public class PingProcess
 {
     public PingResult Run(string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        ProcessStartInfo info = new("ping")
+        ProcessStartInfo info = new("ping");
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            Arguments = hostNameOrAddress
-        };
+            info.Arguments = hostNameOrAddress;
+        }
+        else
+        {
+            info.Arguments = $"-c 4 {hostNameOrAddress}";
+        }
 
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
